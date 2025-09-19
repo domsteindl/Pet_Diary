@@ -11,8 +11,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       title: 'Pet Diary',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.amber, useMaterial3: false),
       home: Scaffold(
+        appBar: AppBar(title: Text("Tiertagebuch"),),
         body: Center(
           child: Text('Hello World!'),
         ),
