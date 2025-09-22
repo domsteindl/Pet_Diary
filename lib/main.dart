@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/features/home/presentation/home_screen.dart';
+import 'package:pet_diary/features/navigation/presentation/shell_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,9 +11,13 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       title: 'Pet Diary',
       theme: ThemeData(primarySwatch: Colors.amber, useMaterial3: true),
-      home: HomeScreen(),
+      home:  Scaffold(
+          appBar: AppBar(title: Text("Tiertagebuch")),
+        body: ShellScreen(),
+      ),
     );
   }
 }
