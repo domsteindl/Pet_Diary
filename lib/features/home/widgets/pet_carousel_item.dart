@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PetCarouselItem extends StatelessWidget {
-  const PetCarouselItem({super.key});
+  final int index;
+  const PetCarouselItem({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class PetCarouselItem extends StatelessWidget {
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCD_gKnNlMEqL49zpcHUPrIVTnBNFVWAmAbg&s",
           ),
           SizedBox(height: 16),
-          Text("Katze 1"),
+          Text("Katze ${index + 1}"),
         ],
       ),
     );

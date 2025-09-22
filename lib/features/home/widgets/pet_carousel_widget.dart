@@ -8,10 +8,10 @@ class PetCarouselWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      items: List.generate(3, (index) => PetCarouselItem()),
+      items: List.generate(3, (index) => PetCarouselItem(index: index)),
       options: CarouselOptions(
         enableInfiniteScroll: true,
-        height: 400,
+        height: 350,
         autoPlayCurve: Curves.fastOutSlowIn,
         autoPlay: true,
       ),

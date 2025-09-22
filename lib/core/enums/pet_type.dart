@@ -1,0 +1,4 @@
+enum PetType {
+  cat,
+  dog
+}
