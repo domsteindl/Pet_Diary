@@ -15,7 +15,7 @@ class MainApp extends StatelessWidget {
       title: 'Pet Diary',
       theme: ThemeData(
        textTheme: TextTheme(
-        titleMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        titleMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), //themes not used yet
         bodyMedium: TextStyle(fontSize: 14), 
         labelSmall: TextStyle(color: Colors.grey[600])
        )),

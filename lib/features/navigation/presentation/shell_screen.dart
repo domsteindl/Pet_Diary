@@ -15,7 +15,7 @@ class _ShellScreenState extends State<ShellScreen> {
   bool hoveringLeftEdge = false;
   final List<Widget> screens = [
     HomeScreen(),
-    PetAppointment(),
+    PetAppointmentScreen(),
     PetProfileScreen(),
     SettingsScreen(),
   ];

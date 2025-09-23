@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PetAppointment extends StatelessWidget {
-  const PetAppointment({super.key});
+class PetAppointmentScreen extends StatelessWidget {
+  const PetAppointmentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -39,7 +39,7 @@ class _PetStatsCardState extends State<PetStatsCard> {
             style: TextStyle(fontSize: 16),
           ),
         ),
-        OutlinedButton(
+        OutlinedButton( // Buttons gleiche Länge - Vielleicht Opacity - Struktur zu blockig?
           onPressed: () {},
           child: Text(buttonLabel),
         ),
