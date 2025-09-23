@@ -12,15 +12,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return SafeArea(
+      child: ListView(
+        padding: EdgeInsets.symmetric(vertical: 16),
         children: [
-          PetCarouselWidget(),
-          PetStatsCard(),
-          BottomAppBar(child: Text("Thank you for using my App!")),
-        ],
-      ),
+            PetCarouselWidget(),
+            SizedBox(height: 16,),
+            PetStatsCard(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Center(child: Text("Thank you for using my App!")),
+            ),
+          ],
+        ),
     );
   }
 }

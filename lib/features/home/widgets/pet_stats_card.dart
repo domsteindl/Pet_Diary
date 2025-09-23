@@ -11,38 +11,39 @@ class _PetStatsCardState extends State<PetStatsCard> {
 
 
 
-  @override
+   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Card(
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row( 
-                spacing: 20.0,
-                children: [
-                  Text("Anzahl Haustiere: 0"),
-                  OutlinedButton(
-                    onPressed: null,
-                    child: Text("Haustier hinzufügen"),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                spacing: 20.0,
-                children: [
-                  Text("Anzahl Wichtige Termine: 0"),
-                  OutlinedButton(onPressed: null, child: Text("Termin hinzufügen")),
-                ],
-              ),
-            ),
+            _buildStatRow("Anzahl Haustiere: 0", "Haustier hinzufügen"),
+            SizedBox(height: 12),
+            _buildStatRow("Anzahl wichtige Termine: 0", "Termin hinzufügen"),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStatRow(String label, String buttonLabel) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+        OutlinedButton(
+          onPressed: () {},
+          child: Text(buttonLabel),
+        ),
+      ],
     );
   }
 }

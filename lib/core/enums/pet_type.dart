@@ -1,4 +1,7 @@
 enum PetType {
-  cat,
-  dog
+  cat("Katze"),
+  dog("Hund");
+
+  final String label;
+  const PetType(this.label);
 }
