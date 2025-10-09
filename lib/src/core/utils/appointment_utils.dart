@@ -25,6 +25,10 @@ String dateToHumanReadableString(DateTime? date) {
   }
 }
 
+String dateToHoursAndMinutes(DateTime date) {
+  return '${date.hour.toString().padLeft(2,'0')}:${date.minute.toString().padLeft(2,'0')} Uhr';
+}
+
 
 
 Color getAppointmentColor(DateTime? date) {

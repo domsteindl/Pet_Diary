@@ -21,7 +21,7 @@ class PetManager {
           description: "Entläusen",
         ),
         PetAppointment(
-          date: DateTime(2025, DateTime.october, 09, 18),
+          date: DateTime(2025, DateTime.october, 09, 18, 2),
           description: "Haare Schneiden",
         ),
         

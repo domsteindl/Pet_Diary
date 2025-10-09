@@ -136,7 +136,16 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
         showDialog(
           context: context,
           builder: (context) {
-            return Dialog(child: Text(upcomingAppointments.first.description));
+            return Dialog(
+              child: Column(
+                children: [
+                  Text(pet.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
+                    Image.network(pet.imageUrl, ),
+                  Text(upcomingAppointments.first.description),
+                  Text(helperFunctions.dateToHoursAndMinutes(nextDate!)),
+                ],
+              ),
+            );
           },
         );
       },
