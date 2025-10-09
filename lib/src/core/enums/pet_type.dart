@@ -1,7 +1,8 @@
 enum PetType {
-  cat("Katze"),
-  dog("Hund");
+  cat("Katze", "lib/src/assets/illustrations/cat.svg"),
+  dog("Hund", "lib/src/assets/illustrations/shiba.png");
 
   final String label;
-  const PetType(this.label);
+  final String imagePath;
+  const PetType(this.label, this.imagePath);
 }
