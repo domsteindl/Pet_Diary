@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/features/navigation/presentation/shell_screen.dart';
+import 'package:pet_diary/src/features/navigation/presentation/screens/shell_screen.dart';
 
 void main() {
   runApp(const MainApp());

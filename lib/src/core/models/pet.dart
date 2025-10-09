@@ -1,5 +1,5 @@
-import 'package:pet_diary/core/enums/pet_type.dart';
-import 'package:pet_diary/core/models/appointment.dart';
+import 'package:pet_diary/src/core/enums/pet_type.dart';
+import 'package:pet_diary/src/core/models/appointment.dart';
 
 
 class Pet {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/features/home/widgets/pet_carousel_widget.dart';
-import 'package:pet_diary/features/home/widgets/pet_stats_card.dart';
+import 'package:pet_diary/src/features/home/presentation/widgets/pet_carousel_widget.dart';
+import 'package:pet_diary/src/features/home/presentation/widgets/pet_stats_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:pet_diary/core/enums/pet_type.dart';
-import 'package:pet_diary/core/models/appointment.dart';
-import 'package:pet_diary/core/models/pet.dart';
-import 'package:pet_diary/features/home/widgets/pet_carousel_item.dart';
+import 'package:pet_diary/src/core/enums/pet_type.dart';
+import 'package:pet_diary/src/core/models/appointment.dart';
+import 'package:pet_diary/src/core/models/pet.dart';
+import 'package:pet_diary/src/features/home/presentation/widgets/pet_carousel_item.dart';
 
 class PetCarouselWidget extends StatefulWidget {
   const PetCarouselWidget({super.key});

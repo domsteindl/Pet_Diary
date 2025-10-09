@@ -1,4 +1,4 @@
-import 'package:pet_diary/core/models/pet.dart';
+import 'package:pet_diary/src/core/models/pet.dart';
 
 class PetManager {
 

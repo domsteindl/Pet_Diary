@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/core/models/appointment.dart';
-import 'package:pet_diary/core/models/pet.dart';
+import 'package:pet_diary/src/core/models/appointment.dart';
+import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class PetCarouselItem extends StatelessWidget {

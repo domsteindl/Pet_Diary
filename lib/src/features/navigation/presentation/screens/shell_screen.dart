@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/features/appointments/presentation/pet_appointments.dart';
-import 'package:pet_diary/features/home/presentation/home_screen.dart';
-import 'package:pet_diary/features/pet_profile/presentation/pet_profile_screen.dart';
-import 'package:pet_diary/features/settings/presentation/settings_screen.dart';
+import 'package:pet_diary/src/features/appointments/presentation/screens/pet_appointments.dart';
+import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
+import 'package:pet_diary/src/features/pet_profile/presentation/screens/pet_profile_screen.dart';
+import 'package:pet_diary/src/features/settings/presentation/settings_screen.dart';
 
 class ShellScreen extends StatefulWidget {
   const ShellScreen({super.key});
@@ -12,7 +12,6 @@ class ShellScreen extends StatefulWidget {
 }
 
 class _ShellScreenState extends State<ShellScreen> {
-  bool hoveringLeftEdge = false;
   final List<Widget> screens = [
     HomeScreen(),
     PetAppointmentScreen(),
