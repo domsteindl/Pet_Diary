@@ -17,13 +17,14 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       appointments: [
         PetAppointment(
-          date: DateTime(2025, DateTime.september, 27),
+          date: DateTime(2025, DateTime.october, 08, 17),
           description: "Entläusen",
         ),
         PetAppointment(
-          date: DateTime(2025, DateTime.september, 27),
+          date: DateTime(2025, DateTime.october, 09, 18),
           description: "Haare Schneiden",
         ),
+        
         PetAppointment(
           date: DateTime(2025, DateTime.september, 28),
           description: "Waschen",
