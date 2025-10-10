@@ -1,3 +1,4 @@
 class Fish {
   
+  Fish();
 }
