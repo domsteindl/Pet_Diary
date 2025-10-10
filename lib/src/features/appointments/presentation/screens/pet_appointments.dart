@@ -13,28 +13,37 @@ class PetAppointmentScreen extends StatefulWidget {
 }
 
 class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
-  final numberAppointments = 0;
-  final int petsPerTab = 4;
+ 
+ 
+  final int petsPerTab = 6;
   int currentTab = 0;
   int previousTab = 0;
 
   @override
   Widget build(BuildContext context) {
     final pets = PetManager.instance.pets;
+    final numberAppointments = pets.fold<int>(
+  0,
+  (sum, pet) => sum +
+      (pet.appointments ?? [])
+          .where((a) => !a.date.isBefore(DateTime.now()))
+          .length,
+);
     final numberOfTabs = (pets.length / petsPerTab).ceil();
     final start = currentTab * petsPerTab;
     final end = ((currentTab + 1) * petsPerTab).clamp(0, pets.length);
     final petsInTab = pets.sublist(start, end);
+    final dynamicText = numberAppointments == 1 ? "Du hast einen anstehenden Termin diese Woche!": numberAppointments != 0 ? "Du hast $numberAppointments anstehende Termine" : "Diese Woche stehen keine Termine an :)";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
         const Text(
-          'Appointments',
+          'Termine',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        Text('You have $numberAppointments upcoming appointments this week'),
+        Text(dynamicText),
         const SizedBox(height: 10),
 
         // --- Animated Sliding Transition ---
@@ -85,7 +94,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
           ),
         ),
 
-        
+    
         if (numberOfTabs > 1)
           Padding(
             padding: const EdgeInsets.only(top: 10),
