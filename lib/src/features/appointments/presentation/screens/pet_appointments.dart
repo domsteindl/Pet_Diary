@@ -16,6 +16,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
   final numberAppointments = 0;
   final int petsPerTab = 4;
   int currentTab = 0;
+  int previousTab = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +36,25 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
         ),
         Text('You have $numberAppointments upcoming appointments this week'),
         const SizedBox(height: 10),
+
+        // --- Animated Sliding Transition ---
         AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 400),
           transitionBuilder: (child, animation) {
-            return FadeTransition(opacity: animation, child: child);
+            final inFromRight = currentTab > previousTab;
+
+            final slideAnimation = Tween<Offset>(
+              begin: Offset(inFromRight ? 1 : -1, 0),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            ));
+
+            return SlideTransition(
+              position: slideAnimation,
+              child: child,
+            );
           },
           child: Padding(
             key: ValueKey(currentTab),
@@ -69,6 +85,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
           ),
         ),
 
+        
         if (numberOfTabs > 1)
           Padding(
             padding: const EdgeInsets.only(top: 10),
@@ -80,13 +97,13 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       setState(() {
+                        previousTab = currentTab;
                         currentTab = index;
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: currentTab == index
-                          ? Colors.blue
-                          : Colors.grey,
+                      backgroundColor:
+                          currentTab == index ? Colors.blue : Colors.grey,
                       minimumSize: const Size(40, 40),
                     ),
                     child: Text('${index + 1}'),
@@ -102,14 +119,13 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
   Widget _buildPetRow(Pet pet) {
     final hasAppointments = (pet.appointments ?? []).isNotEmpty;
     AppointmentUtils helperFunctions = AppointmentUtils();
-    final upcomingAppointments =
-        (pet.appointments ?? [])
-            .where((a) => !a.date.isBefore(DateTime.now())) // today or future
-            .toList()
-          ..sort((a, b) => a.date.compareTo(b.date));
-    DateTime? nextDate = upcomingAppointments.isNotEmpty
-        ? upcomingAppointments.first.date
-        : null;
+    final upcomingAppointments = (pet.appointments ?? [])
+        .where((a) => !a.date.isBefore(DateTime.now()))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    DateTime? nextDate =
+        upcomingAppointments.isNotEmpty ? upcomingAppointments.first.date : null;
 
     Widget row = Row(
       children: [
@@ -139,37 +155,29 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
           builder: (context) {
             return Dialog(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(pet.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
-                    Image.network(pet.imageUrl, ),
-                  Text(upcomingAppointments.first.description),
-                  Text(helperFunctions.dateToHoursAndMinutes(nextDate!)),
+                  Text(
+                    pet.name,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w800),
+                  ),
+                  Image.network(pet.imageUrl),
+                  if (upcomingAppointments.isNotEmpty)
+                    Column(
+                      children: [
+                        Text(upcomingAppointments.first.description),
+                        Text(helperFunctions
+                            .dateToHoursAndMinutes(nextDate!)),
+                      ],
+                    ),
                 ],
               ),
             );
           },
         );
       },
-      child: Row(
-        children: [
-          if (pet.species.imagePath.contains(".svg"))
-            SvgPicture.asset(pet.species.imagePath, width: 50, height: 50)
-          else
-            Image.asset(pet.species.imagePath, width: 50, height: 50),
-          const SizedBox(width: 10),
-          Expanded(child: Text(pet.name)),
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: helperFunctions.getAppointmentColor(nextDate),
-            ),
-            height: 20,
-            width: 110,
-            child: Text(helperFunctions.dateToHumanReadableString(nextDate)),
-          ),
-        ],
-      ),
+      child: row,
     );
 
     return Padding(
