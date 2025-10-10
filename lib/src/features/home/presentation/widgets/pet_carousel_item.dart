@@ -25,7 +25,6 @@ class PetCarouselItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final events = _buildEvents();
-    print("Events für ${pet.name}: ${events}");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Card(

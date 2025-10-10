@@ -18,7 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
             PetCarouselWidget(),
             SizedBox(height: 16,),
-            PetStatsCard(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Center(child: Text("Thank you for using my App!")),

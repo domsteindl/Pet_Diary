@@ -13,8 +13,6 @@ class PetAppointmentScreen extends StatefulWidget {
 }
 
 class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
- 
- 
   final int petsPerTab = 6;
   int currentTab = 0;
   int previousTab = 0;
@@ -23,17 +21,22 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
   Widget build(BuildContext context) {
     final pets = PetManager.instance.pets;
     final numberAppointments = pets.fold<int>(
-  0,
-  (sum, pet) => sum +
-      (pet.appointments ?? [])
-          .where((a) => !a.date.isBefore(DateTime.now()))
-          .length,
-);
+      0,
+      (sum, pet) =>
+          sum +
+          (pet.appointments ?? [])
+              .where((a) => !a.date.isBefore(DateTime.now()))
+              .length,
+    );
     final numberOfTabs = (pets.length / petsPerTab).ceil();
     final start = currentTab * petsPerTab;
     final end = ((currentTab + 1) * petsPerTab).clamp(0, pets.length);
     final petsInTab = pets.sublist(start, end);
-    final dynamicText = numberAppointments == 1 ? "Du hast einen anstehenden Termin diese Woche!": numberAppointments != 0 ? "Du hast $numberAppointments anstehende Termine" : "Diese Woche stehen keine Termine an :)";
+    final dynamicText = numberAppointments == 1
+        ? "Du hast einen anstehenden Termin diese Woche!"
+        : numberAppointments != 0
+        ? "Du hast $numberAppointments anstehende Termine"
+        : "Diese Woche stehen keine Termine an :)";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,18 +55,15 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
           transitionBuilder: (child, animation) {
             final inFromRight = currentTab > previousTab;
 
-            final slideAnimation = Tween<Offset>(
-              begin: Offset(inFromRight ? 1 : -1, 0),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeInOut,
-            ));
+            final slideAnimation =
+                Tween<Offset>(
+                  begin: Offset(inFromRight ? 1 : -1, 0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                );
 
-            return SlideTransition(
-              position: slideAnimation,
-              child: child,
-            );
+            return SlideTransition(position: slideAnimation, child: child);
           },
           child: Padding(
             key: ValueKey(currentTab),
@@ -94,7 +94,6 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
           ),
         ),
 
-    
         if (numberOfTabs > 1)
           Padding(
             padding: const EdgeInsets.only(top: 10),
@@ -111,8 +110,9 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          currentTab == index ? Colors.blue : Colors.grey,
+                      backgroundColor: currentTab == index
+                          ? Colors.blue
+                          : Colors.grey,
                       minimumSize: const Size(40, 40),
                     ),
                     child: Text('${index + 1}'),
@@ -128,13 +128,15 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
   Widget _buildPetRow(Pet pet) {
     final hasAppointments = (pet.appointments ?? []).isNotEmpty;
     AppointmentUtils helperFunctions = AppointmentUtils();
-    final upcomingAppointments = (pet.appointments ?? [])
-        .where((a) => !a.date.isBefore(DateTime.now()))
-        .toList()
-      ..sort((a, b) => a.date.compareTo(b.date));
+    final upcomingAppointments =
+        (pet.appointments ?? [])
+            .where((a) => !a.date.isBefore(DateTime.now()))
+            .toList()
+          ..sort((a, b) => a.date.compareTo(b.date));
 
-    DateTime? nextDate =
-        upcomingAppointments.isNotEmpty ? upcomingAppointments.first.date : null;
+    DateTime? nextDate = upcomingAppointments.isNotEmpty
+        ? upcomingAppointments.first.date
+        : null;
 
     Widget row = Row(
       children: [
@@ -144,20 +146,28 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
           Image.asset(pet.species.imagePath, width: 50, height: 50),
         const SizedBox(width: 10),
         Expanded(child: Text(pet.name)),
-        Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: helperFunctions.getAppointmentColor(nextDate),
-          ),
-          height: 20,
-          width: 110,
-          child: Text(helperFunctions.dateToHumanReadableString(nextDate)),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: helperFunctions.getAppointmentColor(nextDate),
+              ),
+              height: 20,
+              width: 110,
+              child: Text(helperFunctions.dateToHumanReadableString(nextDate)),
+            ),
+            Positioned(left: -18, top: -18, child: Icon(Icons.info)),
+          ],
         ),
       ],
     );
 
     Widget rowClickable = InkWell(
+    
       onTap: () {
         showDialog(
           context: context,
@@ -169,15 +179,16 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
                   Text(
                     pet.name,
                     style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w800),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   Image.network(pet.imageUrl),
                   if (upcomingAppointments.isNotEmpty)
                     Column(
                       children: [
                         Text(upcomingAppointments.first.description),
-                        Text(helperFunctions
-                            .dateToHoursAndMinutes(nextDate!)),
+                        Text(helperFunctions.dateToHoursAndMinutes(nextDate!)),
                       ],
                     ),
                 ],
