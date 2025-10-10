@@ -2,7 +2,7 @@ import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/appointment.dart';
 
 
-class Pet {
+abstract class Pet {
   static int _idCounter = 0;
   final int id;
   final String name;

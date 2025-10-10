@@ -1,5 +1,7 @@
 import 'package:pet_diary/src/core/enums/pet_type.dart';
+import 'package:pet_diary/src/core/models/Cat.dart';
 import 'package:pet_diary/src/core/models/appointment.dart';
+import 'package:pet_diary/src/core/models/dog.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 
 class PetManager {
@@ -9,7 +11,7 @@ class PetManager {
 
   static final PetManager instance = PetManager._privateConstructor();
 
-  final List<Pet> _pets = [    Pet(
+  final List<Pet> _pets = [    Cat(
       name: "Luna",
       species: PetType.cat,
       age: 24,
@@ -17,7 +19,7 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       appointments: [
         PetAppointment(
-          date: DateTime(2025, DateTime.october, 08, 17),
+          date: DateTime(2025, DateTime.october, 10, 17),
           description: "Entläusen",
         ),
         PetAppointment(
@@ -31,14 +33,14 @@ class PetManager {
         ),
       ],
     ),
-    Pet(
+    Cat(
       name: "Mark",
       species: PetType.cat,
       age: 22,
       imageUrl:
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
     ),
-    Pet(
+    Dog(
       name: "Sebastian",
       species: PetType.dog,
       age: 18,
@@ -46,7 +48,7 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       description: "Verschmusst, liebt Eiscreme und Katzenminze",
       
-    ), Pet(
+    ), Dog(
       name: "Sebastian",
       species: PetType.dog,
       age: 18,
@@ -54,7 +56,7 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       description: "Verschmusst, liebt Eiscreme und Katzenminze",
       
-    ), Pet(
+    ), Dog(
       name: "Sebastian",
       species: PetType.dog,
       age: 18,
@@ -62,7 +64,7 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       description: "Verschmusst, liebt Eiscreme und Katzenminze",
       
-    ), Pet(
+    ), Dog(
       name: "Sebastian",
       species: PetType.dog,
       age: 18,
