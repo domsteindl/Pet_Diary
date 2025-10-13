@@ -126,7 +126,8 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
   }
 
   Widget _buildPetRow(Pet pet) {
-    final hasAppointments = (pet.appointments ?? []).isNotEmpty;
+    final hasFutureAppointments = (pet.appointments ?? [])
+    .any((a) => !a.date.isBefore(DateTime.now()));
     AppointmentUtils helperFunctions = AppointmentUtils();
     final upcomingAppointments =
         (pet.appointments ?? [])
@@ -203,8 +204,8 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Opacity(
-        opacity: hasAppointments ? 1.0 : 0.5,
-        child: hasAppointments ? rowClickable : row,
+        opacity: hasFutureAppointments ? 1.0 : 0.5,
+        child: hasFutureAppointments ? rowClickable : row,
       ),
     );
   }
