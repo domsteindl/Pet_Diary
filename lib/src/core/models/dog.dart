@@ -8,5 +8,6 @@ class Dog extends Pet {
     required super.imageUrl,
     super.description = "Keine Beschreibung vorhanden",
     super.appointments,
+    super.entries
   });
 }
