@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
 import 'package:pet_diary/src/core/utils/appointment_utils.dart';
+import 'package:pet_diary/src/features/appointments/presentation/screens/pet_create_appointment.dart';
 
 class PetAppointmentScreen extends StatefulWidget {
   const PetAppointmentScreen({super.key});
@@ -13,25 +14,68 @@ class PetAppointmentScreen extends StatefulWidget {
 }
 
 class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
-  final int petsPerTab = 6;
+  final int petsPerTab = 4;
   int currentTab = 0;
   int previousTab = 0;
 
   @override
   Widget build(BuildContext context) {
     final pets = PetManager.instance.pets;
-    final numberAppointments = pets.fold<int>(
-      0,
-      (sum, pet) =>
-          sum +
-          (pet.appointments ?? [])
-              .where((a) => !a.date.isBefore(DateTime.now()))
-              .length,
-    );
+    final now = DateTime.now();
+    final oneWeekFromNow = now.add(Duration(days: 7));
+
+    List<Pet> petsSorted = pets
+        .where(
+          (pet) =>
+              pet.appointments != null &&
+              pet.appointments!.any(
+                (appointment) =>
+                    appointment.date.isAfter(now) &&
+                    appointment.date.isBefore(oneWeekFromNow),
+              ),
+        )
+        .toList();
+
+    petsSorted.sort((petA, petB) {
+      final petAAppointments = petA.appointments!
+          .where(
+            (appointment) =>
+                appointment.date.isAfter(now) &&
+                appointment.date.isBefore(oneWeekFromNow),
+          )
+          .map((appointment) => appointment.date)
+          .reduce((dateA, dateB) => dateA.isBefore(dateB) ? dateA : dateB);
+
+      final petBAppointments = petB.appointments!
+          .where(
+            (appointment) =>
+                appointment.date.isAfter(now) &&
+                appointment.date.isBefore(oneWeekFromNow),
+          )
+          .map((appointment) => appointment.date)
+          .reduce((dateA, dateB) => dateA.isBefore(dateB) ? dateA : dateB);
+      return petAAppointments.compareTo(petBAppointments);
+    });
+
+
+    Set<Pet> animals = {};
+    animals.addAll(petsSorted);
+    animals.addAll(pets);
+    petsSorted = animals.toList();
+
+final numberAppointments = petsSorted.fold<int>(
+  0,
+  (sum, pet) =>
+      sum +
+      (pet.appointments ?? [])
+          .where((a) =>
+              a.date.isAfter(now) && a.date.isBefore(now.add(Duration(days: 7))))
+          .length,
+);
     final numberOfTabs = (pets.length / petsPerTab).ceil();
     final start = currentTab * petsPerTab;
     final end = ((currentTab + 1) * petsPerTab).clamp(0, pets.length);
-    final petsInTab = pets.sublist(start, end);
+    final petsInTab = petsSorted.sublist(start, end);
     final dynamicText = numberAppointments == 1
         ? "Du hast einen anstehenden Termin diese Woche!"
         : numberAppointments != 0
@@ -42,12 +86,35 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
-        const Text(
-          'Termine',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Termine',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return PetCreateAppointmentScreen();
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         Text(dynamicText),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
 
         // --- Animated Sliding Transition ---
         AnimatedSwitcher(
@@ -71,24 +138,39 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
             child: Card(
               color: Colors.white,
               elevation: 1,
+              // child: Column(
+              //   children: petsInTab.asMap().entries.map((entry) {
+              //     int index = entry.key;
+              //     Pet pet = entry.value;
+              //     return Column(
+              //       children: [
+              //         _buildPetRow(pet),
+              //         if (index != petsInTab.length - 1)
+              //           Divider(
+              //             thickness: 1,
+              //             height: 20,
+              //             indent: 20,
+              //             endIndent: 40,
+              //             color: Colors.grey.withValues(alpha: 0.6),
+              //           ),
+              //       ],
+              //     );
+              //   }).toList(),
+              // ),
               child: Column(
-                children: petsInTab.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  Pet pet = entry.value;
-                  return Column(
-                    children: [
-                      _buildPetRow(pet),
-                      if (index != petsInTab.length - 1)
-                        Divider(
-                          thickness: 1,
-                          height: 20,
-                          indent: 20,
-                          endIndent: 40,
-                          color: Colors.grey.withValues(alpha: 0.6),
-                        ),
-                    ],
-                  );
-                }).toList(),
+                children: [
+                  for (int i = 0; i < petsInTab.length; i++) ...[
+                    _buildPetRow(petsInTab[i]),
+                    if (i != petsInTab.length - 1)
+                      Divider(
+                        thickness: 1,
+                        height: 20,
+                        indent: 20,
+                        endIndent: 40,
+                        color: Colors.grey.withValues(alpha: 0.6),
+                      ),
+                  ],
+                ],
               ),
             ),
           ),
@@ -124,92 +206,104 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
       ],
     );
   }
+Widget _buildPetRow(Pet pet) {
+  final now = DateTime.now();
+  final oneWeekFromNow = now.add(Duration(days: 7));
 
-  Widget _buildPetRow(Pet pet) {
-    final hasFutureAppointments = (pet.appointments ?? [])
-    .any((a) => !a.date.isBefore(DateTime.now()));
-    AppointmentUtils helperFunctions = AppointmentUtils();
-    final upcomingAppointments =
-        (pet.appointments ?? [])
-            .where((a) => !a.date.isBefore(DateTime.now()))
-            .toList()
-          ..sort((a, b) => a.date.compareTo(b.date));
+  // Prüft, ob Pet Termine in der kommenden Woche hat
+  final hasFutureAppointments = (pet.appointments ?? []).any(
+    (a) => a.date.isAfter(now) && a.date.isBefore(oneWeekFromNow),
+  );
 
-    DateTime? nextDate = upcomingAppointments.isNotEmpty
-        ? upcomingAppointments.first.date
-        : null;
+  AppointmentUtils helperFunctions = AppointmentUtils();
 
-    Widget row = Row(
-      children: [
-        if (pet.species.imagePath.contains(".svg"))
-          SvgPicture.asset(pet.species.imagePath, width: 50, height: 50)
-        else
-          Image.asset(pet.species.imagePath, width: 50, height: 50),
-        const SizedBox(width: 10),
-        Expanded(child: Text(pet.name)),
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: helperFunctions.getAppointmentColor(nextDate),
-              ),
-              height: 20,
-              width: 110,
-              child: Text(helperFunctions.dateToHumanReadableString(nextDate)),
-            ),
-            Positioned(left: -18, top: -18, child: Icon(Icons.info)),
-          ],
+  // Liste der Termine innerhalb der nächsten Woche, sortiert nach Datum
+  final upcomingAppointments = (pet.appointments ?? [])
+      .where((a) => a.date.isAfter(now) && a.date.isBefore(oneWeekFromNow))
+      .toList()
+    ..sort((a, b) => a.date.compareTo(b.date));
+
+  DateTime? nextDate = upcomingAppointments.isNotEmpty
+      ? upcomingAppointments.first.date
+      : null;
+
+  Widget row = Row(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      if (pet.species.imagePath.contains(".svg"))
+        SizedBox(
+          height: 50,
+          width: 50,
+          child: SvgPicture.asset(pet.species.imagePath, fit: BoxFit.contain),
+        )
+      else
+        SizedBox(
+          height: 50,
+          width: 50,
+          child: Image.asset(pet.species.imagePath, fit: BoxFit.contain),
         ),
-      ],
-    );
-
-    Widget rowClickable = InkWell(
-    
-      onTap: () {
-        
-        showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    pet.name,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Image.network(pet.imageUrl),
-                  if (upcomingAppointments.isNotEmpty)
-                    Column(
-                      children: [
-                        Text(upcomingAppointments.first.description),
-                        Text(nextDate.toString()),
-                        Text(helperFunctions.dateToHoursAndMinutes(nextDate!)),
-                      ],
-                    ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      child: row,
-    );
-print('${pet.name} hasAppointments: $hasFutureAppointments ${pet.appointments}');
-    return Padding(
-      
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      child: Opacity(
-        opacity: hasFutureAppointments ? 1.0 : 0.5,
-        child: hasFutureAppointments ? rowClickable : row,
+      const SizedBox(width: 10),
+      Expanded(child: Text(pet.name)),
+      Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: helperFunctions.getAppointmentColor(nextDate),
+            ),
+            height: 20,
+            width: 110,
+            child: Text(helperFunctions.dateToHumanReadableString(nextDate)),
+          ),
+          Positioned(left: -18, top: -18, child: Icon(Icons.info)),
+        ],
       ),
-    );
-  }
+    ],
+  );
+
+  Widget rowClickable = InkWell(
+    onTap: () {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  pet.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Image.network(pet.imageUrl),
+                if (upcomingAppointments.isNotEmpty)
+                  Column(
+                    children: [
+                      Text(upcomingAppointments.first.description),
+                      Text(nextDate.toString()),
+                      Text(helperFunctions.dateToHoursAndMinutes(nextDate!)),
+                    ],
+                  ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+    child: row,
+  );
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+    child: Opacity(
+      opacity: hasFutureAppointments ? 1.0 : 0.5,
+      child: hasFutureAppointments ? rowClickable : row,
+    ),
+  );
+}
+
 }

@@ -19,11 +19,11 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       appointments: [
         PetAppointment(
-          date: DateTime(2025, DateTime.october, 13, 17),
+          date: DateTime(2028, DateTime.october, 15, 17),
           description: "Entläusen",
         ),
         PetAppointment(
-          date: DateTime(2025, DateTime.october, 08, 18, 2),
+          date: DateTime(2025, DateTime.october, 10, 18, 2),
           description: "Haare Schneiden",
         ),
         
@@ -59,6 +59,11 @@ class PetManager {
       imageUrl:
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       description: "Verschmusst, liebt Eiscreme und Katzenminze",
+      appointments:  [
+        PetAppointment(
+          date: DateTime(2025, DateTime.october, 14),
+          description: "Waschen",
+        ),]
       
     ), Dog(
       name: "Sebastian",
@@ -67,6 +72,7 @@ class PetManager {
       imageUrl:
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       description: "Verschmusst, liebt Eiscreme und Katzenminze",
+      
       
     ), Dog(
       name: "Sebastian",

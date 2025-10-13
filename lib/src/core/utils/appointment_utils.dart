@@ -41,7 +41,6 @@ Color getAppointmentColor(DateTime? date) {
   if (difference == 0) return Colors.green;
   if(difference == 1) return Colors.orange;
   if (difference > 1 && difference < 7) return Colors.yellow;
-  if (difference >= 7) return Colors.blue;
   return Colors.grey;
 }
 
