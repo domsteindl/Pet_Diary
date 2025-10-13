@@ -19,11 +19,11 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       appointments: [
         PetAppointment(
-          date: DateTime(2025, DateTime.october, 10, 17),
+          date: DateTime(2025, DateTime.october, 13, 17),
           description: "Entläusen",
         ),
         PetAppointment(
-          date: DateTime(2025, DateTime.october, 09, 18, 2),
+          date: DateTime(2025, DateTime.october, 08, 18, 2),
           description: "Haare Schneiden",
         ),
         
@@ -39,6 +39,10 @@ class PetManager {
       age: 22,
       imageUrl:
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
+          appointments: [PetAppointment(
+          date: DateTime(2025, DateTime.october, 13, 17),
+          description: "Entläusen",
+        ),],
     ),
     Dog(
       name: "Sebastian",

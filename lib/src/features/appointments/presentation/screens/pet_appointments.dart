@@ -126,7 +126,9 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
   }
 
   Widget _buildPetRow(Pet pet) {
-    final hasAppointments = (pet.appointments ?? []).isNotEmpty;
+    final hasAppointments = (pet.appointments ?? []).any((appointment) {
+     return !appointment.date.isBefore(DateTime.now());
+    },);
     AppointmentUtils helperFunctions = AppointmentUtils();
     final upcomingAppointments =
         (pet.appointments ?? [])
@@ -169,6 +171,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
     Widget rowClickable = InkWell(
     
       onTap: () {
+        
         showDialog(
           context: context,
           builder: (context) {
@@ -188,6 +191,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
                     Column(
                       children: [
                         Text(upcomingAppointments.first.description),
+                        Text(nextDate.toString()),
                         Text(helperFunctions.dateToHoursAndMinutes(nextDate!)),
                       ],
                     ),
@@ -199,8 +203,9 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
       },
       child: row,
     );
-
+print('${pet.name} hasAppointments: $hasAppointments ${pet.appointments}');
     return Padding(
+      
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Opacity(
         opacity: hasAppointments ? 1.0 : 0.5,

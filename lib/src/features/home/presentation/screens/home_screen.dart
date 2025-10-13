@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -18,13 +17,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-        
+
           children: [
             SizedBox(
               height: 180,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 itemCount: pets.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(width: 16), // space between cards
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SizedBox(
                     width: 150, // fixed width per card
                     child: Card(
-                      elevation: 2,
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -69,7 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(16.0, 8, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(
+                                  16.0,
+                                  8,
+                                  0,
+                                  0,
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -128,33 +135,58 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 30.0),
-              child: Text("Aktionen"),
+              child: Text("Schnellaktionen"),
             ),
-            Row(
-              spacing: 30,
-              children: [
-                Container(
-                  height: 60,
-                  width: 140,
-                  color: Colors.red,
-                  child: ListTile(
-                    leading: Icon(Icons.book, size: 30),
-                    title: Text("Tier anlegen"),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                spacing: 20,
+                children: [
+                  Row(
+                    spacing: 10,
+                    children: [
+                      QuickActionButton(label: "Tier anlegen"),
+                      QuickActionButton(label: "Termin erstellen"),
+                    ],
                   ),
-                ),
-                Container(
-                  height: 60,
-                  width: 150,
-                  color: Colors.red,
-                  child: ListTile(
-                    leading: Icon(Icons.book, size: 30),
-                    title: Text("Termin erstellen"),
+                  Row(
+                    spacing: 10,
+                    children: [
+                      QuickActionButton(label: "Tagebucheintrag"),
+                      QuickActionButton(label: "Test"),
+                    ],
                   ),
-                ),
-      
-              ],
+                ],
+              ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class QuickActionButton extends StatelessWidget {
+  final String label;
+  const QuickActionButton({super.key, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      height: 60,
+      width: 165,
+
+      child: GestureDetector(
+        onTap: () {
+          print("Button unten links");
+        },
+        child: ListTile(
+          leading: Icon(Icons.book, size: 30),
+          title: Text(label),
         ),
       ),
     );
