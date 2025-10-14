@@ -7,9 +7,8 @@ class Cat extends Pet {
     required super.species,
     required super.age,
     required super.imageUrl,
-    super.appointments,
     super.description,
-    super.entries
-    
+    super.appointments,
+    super.entries,
   });
 }

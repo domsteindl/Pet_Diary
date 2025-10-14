@@ -5,9 +5,11 @@ class PetCreateAppointmentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(children: [Form(child: Text("Test"))]),
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Column(children: [Form(child: Text("Test"))]),
+        ),
       ),
     );
   }

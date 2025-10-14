@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/features/appointments/presentation/screens/pet_appointments.dart';
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
-import 'package:pet_diary/src/features/pet_profile/presentation/screens/pet_profile_screen.dart';
+import 'package:pet_diary/src/features/pet_profile/presentation/screens/mypets_screen.dart';
 import 'package:pet_diary/src/features/settings/presentation/settings_screen.dart';
 
 class ShellScreen extends StatefulWidget {
@@ -15,14 +15,14 @@ class _ShellScreenState extends State<ShellScreen> {
   final List<Widget> screens = [
     HomeScreen(),
     PetAppointmentScreen(),
-    PetProfileScreen(),
+    MyPetsScreen(),
     SettingsScreen(),
   ];
   int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("Tiertagebuch")),
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => setState(() {
           index = value;

@@ -82,128 +82,132 @@ final numberAppointments = petsSorted.fold<int>(
         ? "Du hast $numberAppointments anstehende Termine"
         : "Diese Woche stehen keine Termine an :)";
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Termine',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            const SizedBox(height: 10),
+        
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Termine',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+        
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return PetCreateAppointmentScreen();
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return PetCreateAppointmentScreen();
-                      },
-                    ),
-                  );
-                },
+            Text(dynamicText),
+            const SizedBox(height: 5),
+        
+            // --- Animated Sliding Transition ---
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              transitionBuilder: (child, animation) {
+                final inFromRight = currentTab > previousTab;
+        
+                final slideAnimation =
+                    Tween<Offset>(
+                      begin: Offset(inFromRight ? 1 : -1, 0),
+                      end: Offset.zero,
+                    ).animate(
+                      CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                    );
+        
+                return SlideTransition(position: slideAnimation, child: child);
+              },
+              child: Padding(
+                key: ValueKey(currentTab),
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  color: Colors.white,
+                  elevation: 1,
+                  // child: Column(
+                  //   children: petsInTab.asMap().entries.map((entry) {
+                  //     int index = entry.key;
+                  //     Pet pet = entry.value;
+                  //     return Column(
+                  //       children: [
+                  //         _buildPetRow(pet),
+                  //         if (index != petsInTab.length - 1)
+                  //           Divider(
+                  //             thickness: 1,
+                  //             height: 20,
+                  //             indent: 20,
+                  //             endIndent: 40,
+                  //             color: Colors.grey.withValues(alpha: 0.6),
+                  //           ),
+                  //       ],
+                  //     );
+                  //   }).toList(),
+                  // ),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < petsInTab.length; i++) ...[
+                        _buildPetRow(petsInTab[i]),
+                        if (i != petsInTab.length - 1)
+                          Divider(
+                            thickness: 1,
+                            height: 20,
+                            indent: 20,
+                            endIndent: 40,
+                            color: Colors.grey.withValues(alpha: 0.6),
+                          ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
+        
+            if (numberOfTabs > 1)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(numberOfTabs, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            previousTab = currentTab;
+                            currentTab = index;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: currentTab == index
+                              ? Colors.blue
+                              : Colors.grey,
+                          minimumSize: const Size(40, 40),
+                        ),
+                        child: Text('${index + 1}'),
+                      ),
+                    );
+                  }),
+                ),
+              ),
           ],
         ),
-        Text(dynamicText),
-        const SizedBox(height: 5),
-
-        // --- Animated Sliding Transition ---
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 400),
-          transitionBuilder: (child, animation) {
-            final inFromRight = currentTab > previousTab;
-
-            final slideAnimation =
-                Tween<Offset>(
-                  begin: Offset(inFromRight ? 1 : -1, 0),
-                  end: Offset.zero,
-                ).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-                );
-
-            return SlideTransition(position: slideAnimation, child: child);
-          },
-          child: Padding(
-            key: ValueKey(currentTab),
-            padding: const EdgeInsets.all(10.0),
-            child: Card(
-              color: Colors.white,
-              elevation: 1,
-              // child: Column(
-              //   children: petsInTab.asMap().entries.map((entry) {
-              //     int index = entry.key;
-              //     Pet pet = entry.value;
-              //     return Column(
-              //       children: [
-              //         _buildPetRow(pet),
-              //         if (index != petsInTab.length - 1)
-              //           Divider(
-              //             thickness: 1,
-              //             height: 20,
-              //             indent: 20,
-              //             endIndent: 40,
-              //             color: Colors.grey.withValues(alpha: 0.6),
-              //           ),
-              //       ],
-              //     );
-              //   }).toList(),
-              // ),
-              child: Column(
-                children: [
-                  for (int i = 0; i < petsInTab.length; i++) ...[
-                    _buildPetRow(petsInTab[i]),
-                    if (i != petsInTab.length - 1)
-                      Divider(
-                        thickness: 1,
-                        height: 20,
-                        indent: 20,
-                        endIndent: 40,
-                        color: Colors.grey.withValues(alpha: 0.6),
-                      ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        if (numberOfTabs > 1)
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfTabs, (index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        previousTab = currentTab;
-                        currentTab = index;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: currentTab == index
-                          ? Colors.blue
-                          : Colors.grey,
-                      minimumSize: const Size(40, 40),
-                    ),
-                    child: Text('${index + 1}'),
-                  ),
-                );
-              }),
-            ),
-          ),
-      ],
+      ),
     );
   }
 Widget _buildPetRow(Pet pet) {

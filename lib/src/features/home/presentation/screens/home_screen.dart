@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_diary/main.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
 
@@ -11,34 +12,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Pet> pets = PetManager.instance.pets;
+  bool isDark = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
+      child: Scaffold(
+        appBar: AppBar(title: Text("Tiertagebuch")),
+        body: ListView(
+          padding: EdgeInsets.zero,
           children: [
+            OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  isDark = !isDark;
+                  MainApp.of(
+                    context,
+                  )?.changeTheme(isDark ? ThemeMode.dark : ThemeMode.light);
+                });
+              },
+              child: Text("Theme Wechseln"),
+            ),
             SizedBox(
-              height: 180,
+              height: 190,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
                 itemCount: pets.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(width: 16), // space between cards
+                shrinkWrap: true,
+                 separatorBuilder: (_, __) => const SizedBox(width: 16),
                 itemBuilder: (context, index) {
-                  final pet = pets[index];
+                  Pet pet = pets[index];
                   return SizedBox(
-                    width: 150, // fixed width per card
+                    width: 150,
+                    height: 190,
                     child: Card(
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surface, // Theme-konform
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -65,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 60,
                               alignment: Alignment.topLeft,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest, // heller/dunkler Container
                                 borderRadius: BorderRadius.vertical(
                                   bottom: Radius.circular(10),
                                 ),
@@ -78,18 +93,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                   0,
                                 ),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       pet.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.left,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                          ),
                                     ),
                                     Text(
                                       pet.species.label,
-                                      textAlign: TextAlign.left,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurface,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -103,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            
             Padding(
               padding: const EdgeInsets.only(left: 30.0),
               child: Text("Heutiges Tagebuch"),
@@ -112,27 +141,64 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest, // Theme-konform
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 30,
                   children: [
-                    Text("Entry Placeholder"),
+                    Text(
+                      "Entry Placeholder",
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                    ),
+                    SizedBox(height: 20),
                     Row(
-                      spacing: 30,
                       children: [
                         Image.network(pets[0].imageUrl, height: 100),
-                        Column(children: [Text("Text1"), Text("Text 2")]),
+                        SizedBox(width: 10),
+                        Column(
+                          children: [
+                            Text(
+                              "Text1",
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                            ),
+                            Text(
+                              "Text2",
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
+            
             Padding(
               padding: const EdgeInsets.only(left: 30.0),
               child: Text("Schnellaktionen"),
@@ -172,21 +238,37 @@ class QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: theme.colorScheme.surfaceContainerHighest, // Theme-konformer Hintergrund
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadowColor.withValues(alpha: 0.1),
+            blurRadius: 3,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       height: 60,
       width: 165,
-
       child: GestureDetector(
         onTap: () {
           print("Button unten links");
         },
         child: ListTile(
-          leading: Icon(Icons.book, size: 30),
-          title: Text(label),
+          leading: Icon(
+            Icons.book,
+            size: 30,
+            color: theme.colorScheme.onSurface,
+          ),
+          title: Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurface, // Theme-konforme Textfarbe
+            ),
+          ),
         ),
       ),
     );
