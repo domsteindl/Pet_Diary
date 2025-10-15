@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/src/core/enums/entry_type.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 
 class MyPetsDetailsScreen extends StatefulWidget {

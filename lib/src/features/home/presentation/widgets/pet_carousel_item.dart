@@ -9,8 +9,8 @@ class PetCarouselItem extends StatelessWidget {
 
   Map<DateTime, List<PetAppointment>> _buildEvents() {
     final events = <DateTime, List<PetAppointment>>{};
-    if (pet.appointments != null) {
-      for (var appointment in pet.appointments!) {
+    if (pet.appointments.isNotEmpty) {
+      for (var appointment in pet.appointments) {
         final day = DateTime(
           appointment.date.year,
           appointment.date.month,
@@ -70,7 +70,7 @@ class PetCarouselItem extends StatelessWidget {
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                         */
-                        Text('${pet.description}'),
+                        Text(pet.description),
                       ],
                     ),
                   ),
@@ -137,11 +137,9 @@ calendarBuilders: CalendarBuilders(
 
 PetAppointment? findNextAppointment(Pet pet) {
   DateTime current = DateTime.now();
-  List<PetAppointment> upcomingAppointments = [];
-  if (pet.appointments?.isEmpty ?? true) {
-    return null;
-  }
-  upcomingAppointments = pet.appointments!
+  List<PetAppointment> upcomingAppointments = pet.appointments;
+  
+  upcomingAppointments = pet.appointments
       .where((PetAppointment appointment) => appointment.date.isAfter(current))
       .toList();
 

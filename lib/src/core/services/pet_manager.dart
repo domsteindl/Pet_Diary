@@ -1,3 +1,4 @@
+import 'package:pet_diary/src/core/enums/appointment_type.dart';
 import 'package:pet_diary/src/core/enums/entry_type.dart';
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/Cat.dart';
@@ -20,17 +21,20 @@ class PetManager {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
       appointments: [
         PetAppointment(
-          date: DateTime(2028, DateTime.october, 15, 17),
+          date: DateTime(2025, DateTime.october, 16, 17),
           description: "Entläusen",
+          type: AppointmentType.pflege,
         ),
         PetAppointment(
           date: DateTime(2025, DateTime.october, 10, 18, 2),
           description: "Haare Schneiden",
+          type: AppointmentType.friseur,
         ),
 
         PetAppointment(
           date: DateTime(2025, DateTime.september, 28),
           description: "Waschen",
+          type: AppointmentType.pflege,
         ),
       ],
       entries: [
@@ -71,6 +75,7 @@ class PetManager {
         PetAppointment(
           date: DateTime(2025, DateTime.october, 13, 17),
           description: "Entläusen",
+          type: AppointmentType.pflege,
         ),
       ],
     ),
@@ -93,6 +98,7 @@ class PetManager {
         PetAppointment(
           date: DateTime(2025, DateTime.october, 14),
           description: "Waschen",
+          type: AppointmentType.pflege,
         ),
       ],
     ),

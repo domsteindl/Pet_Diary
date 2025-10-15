@@ -11,6 +11,7 @@ void main() {
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
+  // ignore: library_private_types_in_public_api
   static _MainAppState? of(BuildContext context) =>
       context.findAncestorStateOfType<_MainAppState>();
   @override
@@ -30,7 +31,7 @@ class _MainAppState extends State<MainApp> {
     return Builder(
       builder: (context) {
         // Plattform-Helligkeit
-        final brightness = MediaQuery.platformBrightnessOf(context);
+        //final brightness = MediaQuery.platformBrightnessOf(context);
 
         // Google Fonts TextTheme erstellen
         TextTheme textTheme = createTextTheme(
