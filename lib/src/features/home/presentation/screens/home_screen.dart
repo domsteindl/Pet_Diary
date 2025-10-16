@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     children: [
-                      QuickActionButton(label: "Tier anlegen"),
+                      QuickActionButton(label: "Tiere Verwalten"),
                       const SizedBox(width: 10),
                       QuickActionButton(label: "Termin erstellen"),
                     ],
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       QuickActionButton(label: "Tagebucheintrag"),
                       const SizedBox(width: 10),
-                      QuickActionButton(label: "Test"),
+                      QuickActionButton(label: "Tier anlegen"),
                     ],
                   ),
                 ],

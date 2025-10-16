@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppointmentUtils {
+  const AppointmentUtils();
   String dateToHumanReadableString(DateTime? date) {
     if (date == null) return "Keine Termine";
 

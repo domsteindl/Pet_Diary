@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
+import 'package:pet_diary/src/core/utils/appointment_utils.dart';
 
 class TabContentEntries extends StatelessWidget {
   final Pet pet;
-
+  static AppointmentUtils dateHelper = AppointmentUtils();
   const TabContentEntries({super.key, required this.pet});
 
   @override
@@ -27,8 +28,7 @@ class TabContentEntries extends StatelessWidget {
                 children: [
                   if (entry.note != null) Text("Notiz: ${entry.note}"),
                   Text(
-                    "${entry.date.day}.${entry.date.month}.${entry.date.year} "
-                    "${entry.date.hour}:${entry.date.minute.toString().padLeft(2, '0')}",
+                    '${dateHelper.dateToLocalFormat(entry.date)} ${dateHelper.dateToHoursAndMinutes(entry.date)}',
                   ),
                 ],
               ),
