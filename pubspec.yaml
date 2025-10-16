@@ -25,6 +25,18 @@ dev_dependencies:
 flutter_native_splash:
   image: "lib/src/assets/icon/icon.png"
   color: "#a2ebe8"
+  branding_mode: scale
+  
+
+  android_12:
+    image: "lib/src/assets/icon/icon.png"
+    color: "#a2ebe8"
+    
+
+  ios: true
+  web: false
+
+
 
 flutter:
   uses-material-design: true

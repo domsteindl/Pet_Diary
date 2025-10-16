@@ -18,10 +18,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: const Text("Tiertagebuch")),
-        body: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Tiertagebuch",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+        elevation: 3,
+      ),
+
+      body: SafeArea(
+        child: ListView(
           padding: EdgeInsets.zero,
           children: [
             SizedBox(

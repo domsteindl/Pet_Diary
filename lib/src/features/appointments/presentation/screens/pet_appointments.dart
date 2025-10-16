@@ -37,37 +37,44 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
 
     final dynamicText = getAppointmentMessage(numberAppointments);
 
-    return SafeArea(
-      child: Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(right: 8.0, top: 15),
-          child: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PetCreateAppointmentScreen(),
-                ),
-              );
-            },
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Termine", style: Theme.of(context).textTheme.titleLarge),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+        elevation: 3,
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 8.0, top: 70),
+        child: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PetCreateAppointmentScreen(),
+              ),
+            );
+          },
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 1,
+            ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        body: Column(
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      body: SafeArea(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Termine',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
             const SizedBox(height: 40),
             Text(dynamicText),
             const SizedBox(height: 5),

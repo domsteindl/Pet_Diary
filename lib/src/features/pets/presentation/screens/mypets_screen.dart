@@ -8,24 +8,56 @@ class MyPetsScreen extends StatelessWidget {
 
   MyPetsScreen({super.key});
 
+  void _goToManagePets(BuildContext context, [Pet? pet]) {
+    Navigator.pushNamed(
+      context,
+      '/manage_pets',
+      arguments: pet, // null if adding new, or pass the pet for editing
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/manage_pets'),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _goToManagePets(context),
+        icon: Icon(Icons.manage_accounts),
+        label: Text('Verwalten'),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 1,
+          ),
+        ),
         heroTag: null,
-        child: Icon(Icons.add),
       ),
       body: SafeArea(
+        top: false,
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
               pinned: true,
               floating: true,
               snap: false,
-              expandedHeight: 100,
-              flexibleSpace: FlexibleSpaceBar(title: Text("Meine Haustiere")),
+              expandedHeight: 80,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
+              elevation: 3,
+
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  "Meine Haustiere",
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
             ),
+
+            // Grid of pets
             SliverPadding(
               padding: const EdgeInsets.all(8),
               sliver: SliverGrid(
@@ -36,7 +68,20 @@ class MyPetsScreen extends StatelessWidget {
                   childAspectRatio: 0.7,
                 ),
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  return PetCard(pet: pets[index], index: index);
+                  final pet = pets[index];
+                  return GestureDetector(
+                    onLongPress: () => _goToManagePets(context, pet),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: PetCard(pet: pet, index: index),
+                      ),
+                    ),
+                  );
                 }, childCount: pets.length),
               ),
             ),
