@@ -1,6 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/features/navigation/presentation/screens/shell_screen.dart';
+import 'package:pet_diary/src/features/pets/presentation/screens/mypets_manage_screen.dart';
 import 'package:pet_diary/src/theme/theme.dart';
 import 'package:pet_diary/src/theme/util.dart';
 
@@ -43,11 +44,15 @@ class _MainAppState extends State<MainApp> {
         MaterialTheme theme = MaterialTheme(textTheme);
 
         return MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/': (context) => ShellScreen(),
+            '/manage_pets': (context) => MypetsManageScreen(),
+          },
           title: 'Pet Diary',
           theme: theme.light(),
           darkTheme: theme.dark(),
           themeMode: _themeMode,
-          home: const ShellScreen(),
         );
       },
     );

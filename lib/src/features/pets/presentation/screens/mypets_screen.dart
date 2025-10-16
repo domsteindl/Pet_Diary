@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
-import 'package:pet_diary/src/features/pet_profile/presentation/screens/mypets_details_screen.dart';
+import 'package:pet_diary/src/features/pets/presentation/screens/mypets_details_screen.dart';
 
 class MyPetsScreen extends StatelessWidget {
   final List<Pet> pets = PetManager.instance.pets;
@@ -13,11 +13,14 @@ class MyPetsScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.pushNamed(context, '/manage_pets'),
+          heroTag: null,
+          child: Icon(Icons.add),
+        ),
         body: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              title: Text("Tiertagebuch"),
-            ),
+            SliverAppBar(title: Text("Tiertagebuch")),
             // Sticky Header
             SliverPersistentHeader(
               pinned: true, // bleibt oben sichtbar
@@ -35,7 +38,7 @@ class MyPetsScreen extends StatelessWidget {
                 ),
               ),
             ),
-        
+
             // Grid
             SliverPadding(
               padding: const EdgeInsets.all(8),
@@ -50,9 +53,17 @@ class MyPetsScreen extends StatelessWidget {
                   Pet pet = pets[index];
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return  MyPetsDetailsScreen(pet: pets[index], index: index);
-                      },));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MyPetsDetailsScreen(
+                              pet: pets[index],
+                              index: index,
+                            );
+                          },
+                        ),
+                      );
                     },
                     child: Card(
                       child: Column(
@@ -62,7 +73,11 @@ class MyPetsScreen extends StatelessWidget {
                             aspectRatio: 3 / 2,
                             child: Hero(
                               tag: 'tag_$index',
-                              child: Image.network(pet.imageUrl, fit: BoxFit.cover)),
+                              child: Image.network(
+                                pet.imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(4.0),
@@ -72,7 +87,9 @@ class MyPetsScreen extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                            ),
                             child: FittedBox(
                               child: Row(
                                 children: [

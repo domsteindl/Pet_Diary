@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/features/appointments/presentation/screens/pet_appointments.dart';
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
-import 'package:pet_diary/src/features/pet_profile/presentation/screens/mypets_screen.dart';
+import 'package:pet_diary/src/features/pets/presentation/screens/mypets_screen.dart';
 import 'package:pet_diary/src/features/settings/presentation/settings_screen.dart';
 
 class ShellScreen extends StatefulWidget {
