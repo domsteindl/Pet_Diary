@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_diary/src/features/login/domain/pet_login.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,30 +9,21 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _obscurePassword = false;
-
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      final email = _emailController.text;
-      final password = _passwordController.text;
-
-      // Hier kannst du später DB/API Login einfügen
-      print("Login mit $email / $password");
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Login erfolgreich (Demo)!')));
-
-      Navigator.of(context).pushReplacementNamed('/home');
-    }
-  }
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
+    final loginObject = PetLogin(
+      formKey: formKey,
+      emailController: _emailController,
+      passwordController: _passwordController,
+      context: context,
+    );
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -39,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Center(
             child: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -53,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // E-Mail TextField
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'E-Mail',
@@ -74,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // Passwort TextField
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
@@ -97,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Bitte Passwort eingeben';
                         }
+
                         if (value.length < 6) {
                           return 'Mindestens 6 Zeichen';
                         }
@@ -121,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _login,
+                        onPressed: loginObject.login,
                         child: const Text('Login'),
                       ),
                     ),
