@@ -78,8 +78,8 @@ class PetRow extends StatelessWidget {
                       Image.network(pet.imageUrl),
                       if (upcoming.isNotEmpty) ...[
                         Text(upcoming.first.description),
-                        Text(nextDate.toString()),
-                        Text(helper.dateToHoursAndMinutes(nextDate!)),
+                        Text(helper.dateToLocalFormat(nextDate!)),
+                        Text(helper.dateToHoursAndMinutes(nextDate)),
                       ],
                     ],
                   ),
