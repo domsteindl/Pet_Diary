@@ -21,7 +21,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pets = PetManager.instance.pets;
+    final pets = PetManager().pets;
     final now = DateTime.now();
     final oneWeekFromNow = now.add(const Duration(days: 7));
 
@@ -49,7 +49,6 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 8.0, top: 70),
         child: FloatingActionButton(
-          child: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(
               context,
@@ -68,6 +67,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
               width: 1,
             ),
           ),
+          child: const Icon(Icons.add),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,

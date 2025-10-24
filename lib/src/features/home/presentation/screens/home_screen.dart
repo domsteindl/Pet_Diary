@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Pet> pets = PetManager.instance.pets;
+  List<Pet> pets = PetManager().pets;
   bool isDark = false;
 
   @override

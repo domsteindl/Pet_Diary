@@ -4,7 +4,7 @@ import 'package:pet_diary/src/core/services/pet_manager.dart';
 import 'package:pet_diary/src/features/pets/presentation/widgets/main_screen/pet_card.dart';
 
 class MyPetsScreen extends StatelessWidget {
-  final List<Pet> pets = PetManager.instance.pets;
+  final List<Pet> pets = PetManager().pets;
 
   MyPetsScreen({super.key});
 

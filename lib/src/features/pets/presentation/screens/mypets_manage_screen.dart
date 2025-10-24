@@ -10,7 +10,7 @@ class MypetsManageScreen extends StatefulWidget {
 }
 
 class _PetManageScreenState extends State<MypetsManageScreen> {
-  List<Pet> pets = PetManager.instance.pets;
+  List<Pet> pets = PetManager().pets;
 
   void _deletePet(Pet pet) {
     showDialog(

@@ -1,6 +1,7 @@
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 
-class Dog extends Pet {
+class Dog extends Pet with HiveObjectMixin {
   Dog({
     required super.name,
     required super.species,
@@ -9,7 +10,6 @@ class Dog extends Pet {
     super.weight,
     super.description = "Keine Beschreibung vorhanden",
     super.appointments,
-    super.entries
-
+    super.entries,
   });
 }

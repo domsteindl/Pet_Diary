@@ -20,7 +20,7 @@ class _PetCreateAppointmentScreenState
   DateTime? selectedDate;
   int _currentStep = 0;
   String description = '';
-  Pet? selectedPet = PetManager.instance.pets[0];
+  Pet? selectedPet = PetManager().pets[0];
   AppointmentType? selectedType = AppointmentType.values[0];
 
   @override

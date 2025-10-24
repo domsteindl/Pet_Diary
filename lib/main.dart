@@ -1,15 +1,18 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:pet_diary/src/core/services/pet_manager.dart';
 import 'package:pet_diary/src/features/login/presentation/pet_login_screen.dart';
 import 'package:pet_diary/src/features/navigation/presentation/screens/shell_screen.dart';
+import 'package:pet_diary/src/features/pets/presentation/screens/mypets_add_screen.dart';
 import 'package:pet_diary/src/features/pets/presentation/screens/mypets_manage_screen.dart';
 import 'package:pet_diary/src/theme/theme.dart';
 import 'package:pet_diary/src/theme/util.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await PetManager().init();
 
   runApp(const MainApp());
   Future.delayed(Duration(seconds: 3), () {
@@ -49,9 +52,10 @@ class _MainAppState extends State<MainApp> {
         MaterialTheme theme = MaterialTheme(textTheme);
 
         return MaterialApp(
+          showPerformanceOverlay: false,
           initialRoute: '/login',
           routes: {
-            '/login': (context) => LoginScreen(),
+            '/login': (context) => MypetsAddScreen(),
             '/manage_pets': (context) => MypetsManageScreen(),
             '/home': (context) => ShellScreen(),
           },
