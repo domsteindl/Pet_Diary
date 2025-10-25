@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:vector_math/vector_math_64.dart' as vmath;
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
@@ -19,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Pet> pets = PetManager().pets;
   bool isDark = false;
 
+  int? selectedIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       suggestionsBuilder: (context, controller) {
                         final String input = controller.text;
 
-                        return PetManager().pets
+                        return pets
                             .where(
                               (Pet pet) => pet.species.label.contains(input),
                             )
@@ -56,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   GestureDetector(
+                    onTap: () => print("tapped"),
                     child: Container(
                       height: 60,
                       width: 60,
@@ -79,32 +83,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: PetType.values.length,
 
                   itemBuilder: (context, index) {
-                    return Container(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Card(
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(50),
-                        ),
-                        child: AspectRatio(
-                          aspectRatio: 3 / 4,
-                          child: Column(
-                            spacing: 10,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Container(
-                                  height: 60,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(30),
+                    return GestureDetector(
+                      onTap: () => setState(() {
+                        selectedIndex = index;
+                      }),
+                      child: Container(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(50),
+                          ),
+                          child: AspectRatio(
+                            aspectRatio: 3 / 4,
+                            child: Column(
+                              spacing: 10,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Icon(
+                                      color: selectedIndex == index
+                                          ? Colors.orange
+                                          : Colors.black,
+                                      Icons.pest_control_rodent,
+                                    ),
                                   ),
-                                  child: Icon(Icons.pest_control_rodent),
                                 ),
-                              ),
-                              Text(PetType.values[index].label),
-                            ],
+                                Text(PetType.values[index].label),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -112,20 +126,60 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              ListView.builder(
-                itemCount: pets.length,
-                itemBuilder: (context, index) {},
-              ),
-              ClipPath(
-                clipper: CustomClipperShape(),
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //   borderRadius: BorderRadius.circular(5),
+              SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: pets.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    Pet pet = pets[index];
+                    final textPainter = TextPainter(
+                      text: TextSpan(text: pet.name),
+                      textDirection: TextDirection.ltr,
+                    )..layout();
 
-                  // ),
-                  color: Colors.red,
-                  width: 180,
-                  height: 180,
+                    final textWidth = textPainter.width;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.centerLeft,
+                        children: [
+                          ClipPath(
+                            clipper: CustomClipperShape(),
+                            child: Container(
+                              color: const Color.fromARGB(255, 216, 214, 175),
+                              width: 180,
+                              height: 180,
+                            ),
+                          ),
+
+                          Positioned(
+                            top: 90,
+                            left: -20,
+                            child: Transform(
+                              alignment: Alignment.topLeft,
+                              transform: Matrix4.identity()
+                                ..rotateZ(-pi / 2)
+                                ..translateByVector3(
+                                  vmath.Vector3(-textWidth + 40, 0, 0),
+                                ), // TextWidth messen
+                              child: Text(pet.name),
+                            ),
+                          ),
+                          Positioned(
+                            top: 50,
+                            child: Text('Typ: ${pet.species.label}'),
+                          ),
+                          Positioned.fill(
+                            top: 40,
+                            left: 40,
+                            child: SvgPicture.asset(pet.species.imagePath),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
