@@ -19,75 +19,15 @@ class MyPetsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _goToManagePets(context),
-        icon: Icon(Icons.manage_accounts),
-        label: Text('Verwalten'),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-            width: 1,
-          ),
+      appBar: AppBar(
+        title: Text(
+          "Tiertagebuch",
+          style: Theme.of(context).textTheme.titleLarge,
         ),
-        heroTag: null,
+        elevation: 3,
       ),
-      body: SafeArea(
-        top: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              floating: true,
-              snap: false,
-              expandedHeight: 80,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
-              elevation: 3,
 
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  "Meine Haustiere",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-            ),
-
-            // Grid of pets
-            SliverPadding(
-              padding: const EdgeInsets.all(8),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 0.7,
-                ),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final pet = pets[index];
-                  return GestureDetector(
-                    onLongPress: () => _goToManagePets(context, pet),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: PetCard(pet: pet, index: index),
-                      ),
-                    ),
-                  );
-                }, childCount: pets.length),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: SafeArea(child: Text("")),
     );
   }
 }

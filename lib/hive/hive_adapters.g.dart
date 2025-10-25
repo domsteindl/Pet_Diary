@@ -83,6 +83,9 @@ class PetTypeAdapter extends TypeAdapter<PetType> {
         writer.writeByte(0);
       case PetType.dog:
         writer.writeByte(1);
+
+      case PetType.bird:
+        writer.writeByte(2);
     }
   }
 

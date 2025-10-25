@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
 import 'package:pet_diary/src/features/login/presentation/pet_login_screen.dart';
 import 'package:pet_diary/src/features/navigation/presentation/screens/shell_screen.dart';
 import 'package:pet_diary/src/features/pets/presentation/screens/mypets_add_screen.dart';
@@ -53,11 +54,12 @@ class _MainAppState extends State<MainApp> {
 
         return MaterialApp(
           showPerformanceOverlay: false,
-          initialRoute: '/login',
+          initialRoute: '/home',
           routes: {
-            '/login': (context) => MypetsAddScreen(),
+            '/login': (context) => LoginScreen(),
+            '/home': (context) => HomeScreen(),
             '/manage_pets': (context) => MypetsManageScreen(),
-            '/home': (context) => ShellScreen(),
+            '/shell': (context) => ShellScreen(),
           },
           title: 'Pet Diary',
           theme: theme.light(),
