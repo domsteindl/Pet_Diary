@@ -17,7 +17,7 @@ class PetDropdown extends StatelessWidget {
     return DropdownMenuFormField(
       label: const Text("Deine Tiere"),
       initialSelection: selectedPet,
-      dropdownMenuEntries: List.generate(PetManager().numberOfPets, (index) {
+      dropdownMenuEntries: List.generate(PetManager().pets.length, (index) {
         Pet pet = PetManager().pets[index];
         return DropdownMenuEntry(value: pet, label: pet.name);
       }),

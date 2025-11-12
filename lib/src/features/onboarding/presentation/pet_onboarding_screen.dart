@@ -59,29 +59,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: PageView(
-          controller: _controller,
-          onPageChanged: (index) {
-            setState(() => isLastPage = index == 2);
-          },
-          children: [
-            buildPage(
-              color: Colors.teal.shade50,
-              imageUrl: images[0],
-              title: 'Willkommen bei Pet Diary 🐾',
-              subtitle: 'Behalte den Überblick über deine Tiere mit einer App.',
-            ),
-            buildPage(
-              color: Colors.teal.shade100,
-              imageUrl: images[1],
-              title: 'Pflege leicht gemacht',
-              subtitle:
-                  'Füge Erinnerungen, Fotos und Notizen zu jedem Tier hinzu.',
-            ),
-            buildLastPage(context),
-          ],
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(0),
+          child: PageView(
+            controller: _controller,
+            onPageChanged: (index) {
+              setState(() => isLastPage = index == 2);
+            },
+            children: [
+              buildPage(
+                color: Colors.teal.shade50,
+                imageUrl: images[0],
+                title: 'Willkommen bei Pet Diary 🐾',
+                subtitle:
+                    'Behalte den Überblick über deine Tiere mit einer App.',
+              ),
+              buildPage(
+                color: Colors.teal.shade100,
+                imageUrl: images[1],
+                title: 'Pflege leicht gemacht',
+                subtitle:
+                    'Füge Erinnerungen, Fotos und Notizen zu jedem Tier hinzu.',
+              ),
+              buildPage(
+                color: Colors.teal.shade200,
+                imageUrl: images[0],
+                title: "Verfolge die Entwicklung",
+                subtitle:
+                    "Verfolge ganz einfach die Entwicklung deiner Tiere. z. B. Essverhalten, Gewichtsveränderungen usw.",
+              ),
+              buildLastPage(context),
+            ],
+          ),
         ),
       ),
       bottomSheet: Container(
@@ -98,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Center(
               child: SmoothPageIndicator(
                 controller: _controller,
-                count: 3,
+                count: 4,
                 effect: const WormEffect(
                   activeDotColor: Colors.teal,
                   dotColor: Colors.grey,

@@ -34,12 +34,12 @@ class PetManager {
 
     // Start-Daten nur einmal füllen
 
-    if (_petBox.isEmpty) {
+/*     if (_petBox.isEmpty) {
       await _petBox.addAll(_pets.cast<Cat>());
-    }
+    } */
   }
 
-  final List<Cat> _pets = [
+/*   final List<Cat> _pets = [
     Cat(
       name: "Luna",
       species: PetType.cat,
@@ -105,7 +105,7 @@ class PetManager {
           type: AppointmentType.pflege,
         ),
       ],
-    ),
+    ), */
     // Dog(
     //   name: "Sebastian",
     //   species: PetType.dog,
@@ -145,10 +145,10 @@ class PetManager {
     //       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/1200px-Cat_August_2010-4.jpg",
     //   description: "Verschmusst, liebt Eiscreme und Katzenminze",
     // ),
-  ];
+  //];
 
   // List<Pet> get pets => List.unmodifiable(_pets);
-  int get numberOfPets => _pets.length;
+ // int get numberOfPets => _pets.length;
 
   // void addPet(Pet pet) {
   //   _pets.add(pet);
