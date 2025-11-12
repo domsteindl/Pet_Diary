@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/src/features/pets/presentation/widgets/details_screen/pet_tab_content_wrapper.dart';
-import 'package:pet_diary/src/features/pets/presentation/widgets/details_screen/pet_vertical_tabs.dart';
+
 import 'package:pet_diary/src/core/models/pet.dart';
 
 class MyPetsDetailsScreen extends StatefulWidget {

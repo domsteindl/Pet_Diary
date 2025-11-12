@@ -17,7 +17,7 @@ class PetLogin {
       final email = emailController.text;
       final password = passwordController.text;
 
-      // Hier kannst du später DB/API Login einfügen
+      //später DB/API Login einfügen
       print("Login mit $email / $password");
 
       ScaffoldMessenger.of(

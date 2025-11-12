@@ -6,7 +6,7 @@ import 'package:pet_diary/src/core/enums/entry_type.dart';
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/cat.dart';
 import 'package:pet_diary/src/core/models/appointment.dart';
-import 'package:pet_diary/src/core/models/dog.dart';
+
 import 'package:pet_diary/src/core/models/entry.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 

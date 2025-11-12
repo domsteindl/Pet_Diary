@@ -6,9 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/pet_manager.dart';
-import 'package:pet_diary/src/features/home/presentation/widgets/pet_diary_entry.dart';
-import 'package:pet_diary/src/features/home/presentation/widgets/pet_quick_action_button.dart';
-import '../widgets/pet_card.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -193,25 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
 class CustomClipperShape extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    // final path =
-    //     Path() //! x = horizontal, y = vertical, startpunkt oben links
-    //       ..moveTo(20, 0)
-    //       ..quadraticBezierTo(0, 0, 0, 20)
-    //       ..lineTo(0.0, size.height - 20) //!Linie nach unten
-    //       ..quadraticBezierTo(0, size.height, 20, size.height)
-    //       ..lineTo(
-    //         size.width - size.width * 0.1,
-    //         size.height,
-    //       ) //!Linie nach ganz unten rechts
-    //       ..quadraticBezierTo(
-    //         size.width,
-    //         size.height,
-    //         size.width,
-    //         size.height - size.height * 0.1,
-    //       )
-    //       //!Linie oben
-    //       ..lineTo(size.width / 2 - 20, 0.0)
-    //       ..close();
 
     final w = size.width;
     final height = size.height;
