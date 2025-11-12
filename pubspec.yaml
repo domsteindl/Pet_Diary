@@ -18,6 +18,8 @@ dependencies:
   hive_ce_flutter: ^2.3.2
   http: ^1.5.0
   path_provider: ^2.0.17
+  shared_preferences: ^2.5.3
+  smooth_page_indicator: ^1.2.1
   table_calendar: ^3.2.0
 
 dev_dependencies:
