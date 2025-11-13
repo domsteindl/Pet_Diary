@@ -53,4 +53,5 @@ flutter:
     - lib/src/assets/
     - lib/src/assets/illustrations/
     - lib/src/assets/icon/
+    - .env
 

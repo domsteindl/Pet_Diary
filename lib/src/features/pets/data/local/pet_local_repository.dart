@@ -17,5 +17,5 @@ class PetLocalRepository implements PetRepository {
   Future<void> updatePet(Pet pet) async => _box.put(pet.id, pet);
 
   @override
-  Future<void> deletePet(String id) async => _box.delete(id);
+  Future<void> deletePet(int id) async => _box.delete(id);
 }

@@ -9,6 +9,7 @@ class Cat extends Pet with HiveObjectMixin {
     required super.name,
     required super.species,
     required super.age,
+    required super.weight,
     required super.imageUrl,
     super.description,
     super.appointments,
@@ -17,11 +18,15 @@ class Cat extends Pet with HiveObjectMixin {
 
   factory Cat.fromMap(Map<String, dynamic> map) {
     return Cat(
-      name: map['name'] as String,
-      species: PetType.values.firstWhere((e) => e.name == map['species']),
-      age: map['age'] as int,
-     // weight: (map['weight'] as num?)?.toDouble() ?? 1.0,
-      imageUrl: map['imageUrl'] as String,
+      name: map['name'] as String? ?? 'Unbekannt',
+      species: PetType.values.firstWhere(
+        (e) =>
+            e.name.toLowerCase() == (map['species'] as String?)?.toLowerCase(),
+        orElse: () => PetType.cat, // Default-Fallback
+      ),
+      age: (map['age'] as num?)?.toInt() ?? 0,
+      weight: (map['weight'] as num?)?.toDouble() ?? 1.0,
+      imageUrl: map['imageUrl'] as String? ?? '',
       description:
           map['description'] as String? ?? "Keine Beschreibung vorhanden",
       appointments:

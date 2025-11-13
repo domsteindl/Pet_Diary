@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/enums/appointment_type.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
 import 'package:pet_diary/src/features/appointments/domain/create_appointment/pet_create_appointment_helper.dart';
 import 'package:pet_diary/src/features/appointments/presentation/widgets/pet_appointment_type_dropdown.dart';
 import 'package:pet_diary/src/features/appointments/presentation/widgets/pet_date_picker_step.dart';
@@ -20,7 +20,7 @@ class _PetCreateAppointmentScreenState
   DateTime? selectedDate;
   int _currentStep = 0;
   String description = '';
-  Pet? selectedPet = PetManager().pets[0];
+  Pet? selectedPet = HiveService.getAllPets()[0];
   AppointmentType? selectedType = AppointmentType.values[0];
 
   @override

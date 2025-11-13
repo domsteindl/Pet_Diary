@@ -5,7 +5,7 @@ nextTypeId: 7
 types:
   Cat:
     typeId: 0
-    nextIndex: 8
+    nextIndex: 9
     fields:
       name:
         index: 1
@@ -21,14 +21,18 @@ types:
         index: 6
       entries:
         index: 7
+      weight:
+        index: 8
   PetType:
     typeId: 1
-    nextIndex: 2
+    nextIndex: 3
     fields:
       cat:
         index: 0
       dog:
         index: 1
+      bird:
+        index: 2
   PetAppointment:
     typeId: 3
     nextIndex: 3

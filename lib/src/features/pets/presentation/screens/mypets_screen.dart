@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
 
 
 class MyPetsScreen extends StatelessWidget {
-  final List<Pet> pets = PetManager().pets;
+  final List<Pet> pets = HiveService.getAllPets();
 
   MyPetsScreen({super.key});
 

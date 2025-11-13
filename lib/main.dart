@@ -14,6 +14,7 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Services.initAll();
+  await Services.syncAll();
 
   //await PetManager().init();
 

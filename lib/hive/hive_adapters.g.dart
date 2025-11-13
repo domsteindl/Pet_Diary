@@ -20,6 +20,7 @@ class CatAdapter extends TypeAdapter<Cat> {
       name: fields[1] as String,
       species: fields[2] as PetType,
       age: (fields[3] as num).toInt(),
+      weight: (fields[8] as num).toDouble(),
       imageUrl: fields[4] as String,
       description: fields[5] == null
           ? "Keine Beschreibung vorhanden"
@@ -32,7 +33,7 @@ class CatAdapter extends TypeAdapter<Cat> {
   @override
   void write(BinaryWriter writer, Cat obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
@@ -46,7 +47,9 @@ class CatAdapter extends TypeAdapter<Cat> {
       ..writeByte(6)
       ..write(obj.appointments)
       ..writeByte(7)
-      ..write(obj.entries);
+      ..write(obj.entries)
+      ..writeByte(8)
+      ..write(obj.weight);
   }
 
   @override
@@ -71,6 +74,8 @@ class PetTypeAdapter extends TypeAdapter<PetType> {
         return PetType.cat;
       case 1:
         return PetType.dog;
+      case 2:
+        return PetType.bird;
       default:
         return PetType.cat;
     }
@@ -83,7 +88,6 @@ class PetTypeAdapter extends TypeAdapter<PetType> {
         writer.writeByte(0);
       case PetType.dog:
         writer.writeByte(1);
-
       case PetType.bird:
         writer.writeByte(2);
     }

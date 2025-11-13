@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
+
 
 class MypetsManageScreen extends StatefulWidget {
   const MypetsManageScreen({super.key});
@@ -10,7 +11,7 @@ class MypetsManageScreen extends StatefulWidget {
 }
 
 class _PetManageScreenState extends State<MypetsManageScreen> {
-  List<Pet> pets = PetManager().pets;
+  List<Pet> pets = HiveService.getAllPets();
 
 
 

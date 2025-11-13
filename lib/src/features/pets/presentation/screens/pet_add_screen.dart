@@ -1,11 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/cat.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/models/pet.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
+import 'package:pet_diary/src/core/services/supabase_service.dart';
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
-
+import 'package:pet_diary/src/features/pets/data/local/pet_local_repository.dart';
+import 'package:pet_diary/src/features/pets/data/remote/pet_remote_repository.dart';
+import 'package:pet_diary/src/features/pets/domain/usecases/sync_pets_usecase.dart';
+import 'package:pet_diary/src/features/pets/sync/pet_sync_service.dart';
 
 class PetAddScreen extends StatefulWidget {
   const PetAddScreen({super.key});
@@ -20,10 +26,20 @@ class _PetAddScreenState extends State<PetAddScreen> {
   PetType _selectedType = PetType.cat;
   String? _imageUrl;
 
+  late final SyncPetsUseCase _syncPetsUseCase;
+
   @override
   void initState() {
     super.initState();
     loadRandomImage();
+
+    final localRepo = PetLocalRepository(Hive.box<Pet>('pets'));
+    final remoteRepo = PetRemoteRepository(SupabaseService.client);
+    final syncService = PetSyncService(
+      localRepo: localRepo,
+      remoteRepo: remoteRepo,
+    );
+    _syncPetsUseCase = SyncPetsUseCase(syncService);
   }
 
   Future<void> loadRandomImage() async {
@@ -48,12 +64,19 @@ class _PetAddScreenState extends State<PetAddScreen> {
       name: _nameController.text.trim(),
       species: _selectedType,
       age: 0,
+      weight: 2.0,
       imageUrl: _imageUrl ?? '',
       appointments: [],
       entries: [],
     );
 
-    await PetManager().addPet(newPet);
+    await HiveService.addPet(newPet);
+    try {
+      await _syncPetsUseCase.call();
+      debugPrint('Sync mit Supabase abgeschlossen');
+    } catch (e) {
+      debugPrint('Fehler beim Sync: $e');
+    }
 
     if (!mounted) return;
 

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/cat.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
+
 
 class MypetsAddScreen extends StatefulWidget {
   MypetsAddScreen({super.key});
@@ -16,6 +17,7 @@ class _MypetsAddScreenState extends State<MypetsAddScreen> {
   final Cat pet = Cat(
     name: "TestObjekt",
     species: PetType.cat,
+    weight: 2.0,
     age: 5,
     imageUrl: "",
   );
@@ -40,7 +42,7 @@ class _MypetsAddScreenState extends State<MypetsAddScreen> {
                     suggestionsBuilder: (context, controller) {
                       final String input = controller.text;
 
-                      return PetManager().pets
+                      return HiveService.getAllPets()
                           .where((Pet pet) => pet.species.label.contains(input))
                           .map((e) => Text(e.name))
                           .toList();

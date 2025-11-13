@@ -5,8 +5,10 @@ import 'package:pet_diary/src/core/models/dog.dart';
 import 'package:pet_diary/src/core/models/entry.dart';
 
 abstract class Pet {
-  static int _idCounter = 0;
-  final int id;
+ // static int _idCounter = 0;
+
+  int? _id;
+  int? get id => _id;
   final String name;
   final PetType species;
   final int age;
@@ -24,15 +26,17 @@ abstract class Pet {
     this.weight = 1.0,
     List<PetAppointment>? appointments,
     List<DiaryEntry>? entries,
-  }) : id = _idCounter++,
+  }) : //id = _idCounter++,
        appointments = appointments ?? [],
        entries = entries ?? [];
 
-        Map<String, dynamic> toMap() {
+  void setId(int id) => _id = id;
+
+  Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (_id != null) 'id': _id,
       'name': name,
-      'species': species.name, 
+      'species': species.name,
       'age': age,
       'weight': weight,
       'imageUrl': imageUrl,
@@ -43,13 +47,17 @@ abstract class Pet {
   }
 
   factory Pet.fromMap(Map<String, dynamic> map) {
-    switch (map['species'] as String) {
-      case 'Dog':
-        return Dog.fromMap(map);
-      case 'Cat':
-        return Cat.fromMap(map);
+    switch ((map['species'] as String).toLowerCase()) {
+      case 'dog':
+        final pet = Dog.fromMap(map);
+        if (map['id'] != null) pet.setId(map['id'] as int);
+        return pet;
+      case 'cat':
+        final pet = Cat.fromMap(map);
+        if (map['id'] != null) pet.setId(map['id'] as int);
+        return pet;
       default:
-        throw Exception('Unknown PetType');
+        throw Exception('Unknown PetType: ${map['species']}');
     }
   }
 }

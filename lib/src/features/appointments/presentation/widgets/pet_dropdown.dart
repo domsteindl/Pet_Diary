@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
 
 class PetDropdown extends StatelessWidget {
   final Pet? selectedPet;
@@ -17,8 +17,8 @@ class PetDropdown extends StatelessWidget {
     return DropdownMenuFormField(
       label: const Text("Deine Tiere"),
       initialSelection: selectedPet,
-      dropdownMenuEntries: List.generate(PetManager().pets.length, (index) {
-        Pet pet = PetManager().pets[index];
+      dropdownMenuEntries: List.generate(HiveService.getAllPets().length, (index) {
+        Pet pet = HiveService.getAllPets()[index];
         return DropdownMenuEntry(value: pet, label: pet.name);
       }),
       onSelected: onChanged,

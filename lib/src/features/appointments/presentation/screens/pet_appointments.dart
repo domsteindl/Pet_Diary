@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+import 'package:pet_diary/src/core/services/hive_service.dart';
 import 'package:pet_diary/src/features/appointments/domain/appointment/pet_appointment_counter.dart';
 import 'package:pet_diary/src/features/appointments/domain/appointment/pet_appointment_sorter.dart';
 import 'package:pet_diary/src/features/appointments/domain/appointment/pet_appointment_text.dart';
@@ -21,7 +21,7 @@ class _PetAppointmentScreenState extends State<PetAppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pets = PetManager().pets;
+    final pets = HiveService.getAllPets();
     final now = DateTime.now();
     final oneWeekFromNow = now.add(const Duration(days: 7));
 

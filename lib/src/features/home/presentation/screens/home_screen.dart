@@ -1,11 +1,12 @@
 import 'dart:math';
 
+import 'package:pet_diary/src/core/services/hive_service.dart';
 import 'package:vector_math/vector_math_64.dart' as vmath;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
-import 'package:pet_diary/src/core/services/pet_manager.dart';
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Pet> pets = PetManager().pets;
+  List<Pet> pets = HiveService.getAllPets();
   bool isDark = false;
 
   int? selectedIndex;

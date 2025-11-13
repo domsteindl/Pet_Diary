@@ -1,5 +1,3 @@
-
-
 import 'package:pet_diary/src/features/pets/data/local/pet_local_repository.dart';
 import 'package:pet_diary/src/features/pets/data/remote/pet_remote_repository.dart';
 
@@ -9,24 +7,42 @@ class PetSyncService {
 
   PetSyncService({required this.localRepo, required this.remoteRepo});
 
-  /// Sync von lokal nach Supabase
   Future<void> pushLocalChanges() async {
     final localPets = await localRepo.getAllPets();
+
     for (final pet in localPets) {
-      // Beispiel: prüfe, ob der Datensatz noch nicht auf Supabase existiert
-      await remoteRepo.addPet(pet);
+      if (pet.id == null) {
+        // Neues Pet → in Supabase anlegen
+        final newId = await remoteRepo.addPet(pet);
+        pet.setId(newId); // lokale Pet-ID mit Supabase-ID setzen
+        await localRepo.updatePet(pet);
+      } else {
+        // Existierendes Pet → nur updaten
+        await remoteRepo.updatePet(pet);
+      }
+
+      // Termine syncen
+      for (final appointment in pet.appointments) {
+        await remoteRepo.addAppointment(
+          petId: pet.id!,
+          appointment: appointment,
+        );
+      }
     }
   }
 
-  /// Sync von Supabase nach lokal
   Future<void> pullRemoteChanges() async {
     final remotePets = await remoteRepo.getAllPets();
+    final localPets = await localRepo.getAllPets();
+
     for (final pet in remotePets) {
-      await localRepo.addPet(pet);
+      final existsLocally = localPets.any((p) => p.id == pet.id);
+      if (!existsLocally) {
+        await localRepo.addPet(pet);
+      }
     }
   }
 
-  /// Gesamter Sync-Vorgang
   Future<void> syncAll() async {
     await pullRemoteChanges();
     await pushLocalChanges();
