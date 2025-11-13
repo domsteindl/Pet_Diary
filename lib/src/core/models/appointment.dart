@@ -11,6 +11,24 @@ class PetAppointment extends HiveObject {
     required this.description,
     required this.type,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'date': date.toIso8601String(),
+      'description': description,
+      'type': type.name,
+    };
+  }
+
+
+  factory PetAppointment.fromMap(Map<String, dynamic> map) {
+    return PetAppointment(
+      date: DateTime.parse(map['date'] as String),
+      description: map['description'] as String,
+      type: AppointmentType.values.firstWhere((e) => e.name == map['type']),
+    );
+  }
+
   @override
   String toString() {
     return '${_formattedDate()} - $description';

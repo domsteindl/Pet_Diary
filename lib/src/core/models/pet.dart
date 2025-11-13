@@ -1,5 +1,7 @@
 import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/appointment.dart';
+import 'package:pet_diary/src/core/models/cat.dart';
+import 'package:pet_diary/src/core/models/dog.dart';
 import 'package:pet_diary/src/core/models/entry.dart';
 
 abstract class Pet {
@@ -25,4 +27,29 @@ abstract class Pet {
   }) : id = _idCounter++,
        appointments = appointments ?? [],
        entries = entries ?? [];
+
+        Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'species': species.name, 
+      'age': age,
+      'weight': weight,
+      'imageUrl': imageUrl,
+      'description': description,
+      'appointments': appointments.map((a) => a.toMap()).toList(),
+      'entries': entries.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  factory Pet.fromMap(Map<String, dynamic> map) {
+    switch (map['species'] as String) {
+      case 'Dog':
+        return Dog.fromMap(map);
+      case 'Cat':
+        return Cat.fromMap(map);
+      default:
+        throw Exception('Unknown PetType');
+    }
+  }
 }

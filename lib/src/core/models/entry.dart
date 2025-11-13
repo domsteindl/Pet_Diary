@@ -14,4 +14,25 @@ class DiaryEntry {
     this.customFields,
     this.note
   });
+
+    Map<String, dynamic> toMap() {
+    return {
+      'date': date.toIso8601String(),
+      'type': type.name,
+      'description': description,
+      'note': note,
+      'customFields': customFields,
+    };
+  }
+
+
+  factory DiaryEntry.fromMap(Map<String, dynamic> map) {
+    return DiaryEntry(
+      date: DateTime.parse(map['date'] as String),
+      type: EntryType.values.firstWhere((e) => e.name == map['type']),
+      description: map['description'] as String?,
+      note: map['note'] as String?,
+      customFields: (map['customFields'] as Map?)?.cast<String, dynamic>(),
+    );
+  }
 }
