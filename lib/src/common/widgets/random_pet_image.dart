@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,8 +36,11 @@ class _RandomPetImageState extends State<RandomPetImage> {
     } catch (e) {
       setState(() {
         imageUrl = null;
-        isLoading = false;
       });
+    } finally {
+        setState(() {
+            isLoading = false;
+        });
     }
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pet_diary/src/core/services/services.dart';
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
@@ -10,7 +9,7 @@ import 'package:pet_diary/src/features/pets/presentation/screens/mypets_manage_s
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Services.initAll();

@@ -6,7 +6,7 @@ import 'package:pet_diary/src/core/services/hive_service.dart';
 
 
 class MypetsAddScreen extends StatefulWidget {
-  MypetsAddScreen({super.key});
+  const MypetsAddScreen({super.key});
 
   @override
   State<MypetsAddScreen> createState() => _MypetsAddScreenState();

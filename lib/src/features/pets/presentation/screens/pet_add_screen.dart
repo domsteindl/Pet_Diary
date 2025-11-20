@@ -120,7 +120,7 @@ class _PetAddScreenState extends State<PetAddScreen> {
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<PetType>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 items: PetType.values
                     .map(
                       (type) =>

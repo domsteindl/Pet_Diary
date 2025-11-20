@@ -1,6 +1,5 @@
 
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:pet_diary/hive/hive_adapters.dart';
 import 'package:pet_diary/hive/hive_registrar.g.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 
