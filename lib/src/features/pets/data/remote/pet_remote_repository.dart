@@ -11,18 +11,29 @@ class PetRemoteRepository implements PetRepository {
   @override
   Future<List<Pet>> getAllPets() async {
     final response = await client.from('pets').select();
+
+    for (var petData in response) {
+      final diaryData = await client
+          .from('diary_entries')
+          .select()
+          .eq('pet_id', petData['id']);
+
+      petData['entries'] = diaryData;
+    }
+
     return (response as List).map((data) => Pet.fromMap(data)).toList();
   }
 
   Future<Pet> getPetById(int id) async {
-    final response = await client
-        .from('pets')
-        .select()
-        .eq('id', id)
-        .limit(1)
-        .single();
+    final petData = await client.from('pets').select().eq('id', id).single();
 
-    return Pet.fromMap(response);
+    final diaryData = await client
+        .from('diary_entries')
+        .select()
+        .eq('pet_id', id);
+
+    petData['entries'] = diaryData;
+    return Pet.fromMap(petData);
   }
 
   Future<bool> exists(int id) async {
@@ -89,14 +100,20 @@ class PetRemoteRepository implements PetRepository {
     });
   }
 
-  Future<void> addDiaryEntry(int petId, String type, String? description, String? note,  Map<dynamic, dynamic>? customFields) async {
+  Future<void> addDiaryEntry(
+    int petId,
+    String type,
+    String? description,
+    String? note,
+    Map<dynamic, dynamic>? customFields,
+  ) async {
     await client.from('diary_entries').insert({
-      'pet_id' : petId,
-      'date' : DateTime.now(),
-      'type' : type,
-      'description' : description ?? 'Platzhalterbeschreibung',
-      'note' : note ?? 'Platzhalternotiz',
-      'custom_fields' : customFields ?? ''
+      'pet_id': petId,
+      'date': DateTime.now(),
+      'type': type,
+      'description': description ?? 'Platzhalterbeschreibung',
+      'note': note ?? 'Platzhalternotiz',
+      'custom_fields': customFields ?? '',
     });
   }
 }

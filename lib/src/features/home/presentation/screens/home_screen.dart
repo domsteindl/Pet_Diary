@@ -24,11 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentPetIndex = 0;
 
   Stream<List<Pet>> getAllPetsStream() {
-    return SupabaseService.client
-        .from('pets')
-        .stream(primaryKey: ['id'])
-        // ID als PrimaryKey
-        .map((eventList) => eventList.map((map) => Pet.fromMap(map)).toList());
+    return remoteRepo.getAllPets().asStream();
   }
 
   int? selectedIndex;
@@ -137,7 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: TimelineTileBuilder(
                         contentsBuilder: (context, index) {
                           final diaryEntry = currentPet.entries[index];
-                          print(diaryEntry);
                           return Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: TimeLineEntry(
