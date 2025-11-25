@@ -14,19 +14,25 @@ class PetRemoteRepository implements PetRepository {
     return (response as List).map((data) => Pet.fromMap(data)).toList();
   }
 
-  Future<bool> exists(int? id) async {
-    if (id == null) return false;
+  Future<Pet> getPetById(int id) async {
+    final response = await client
+        .from('pets')
+        .select()
+        .eq('id', id)
+        .limit(1)
+        .single();
 
-    final data = await client
+    return Pet.fromMap(response);
+  }
+
+  Future<bool> exists(int id) async {
+    final response = await client
         .from('pets')
         .select('id')
         .eq('id', id)
-        .limit(1)
         .maybeSingle();
 
-    final exists = data != null;
-
-    return exists;
+    return response != null;
   }
 
   @override
@@ -49,7 +55,7 @@ class PetRemoteRepository implements PetRepository {
   }
 
   @override
-Future<void> updatePet(Pet pet) async {
+  Future<void> updatePet(Pet pet) async {
     final petId = pet.id;
     if (petId == null) throw Exception('Cannot update pet without ID');
 
@@ -80,6 +86,17 @@ Future<void> updatePet(Pet pet) async {
       'date': appointment.date.toIso8601String(),
       'description': appointment.description,
       'type': appointment.type.name,
+    });
+  }
+
+  Future<void> addDiaryEntry(int petId, String type, String? description, String? note,  Map<dynamic, dynamic>? customFields) async {
+    await client.from('diary_entries').insert({
+      'pet_id' : petId,
+      'date' : DateTime.now(),
+      'type' : type,
+      'description' : description ?? 'Platzhalterbeschreibung',
+      'note' : note ?? 'Platzhalternotiz',
+      'custom_fields' : customFields ?? ''
     });
   }
 }

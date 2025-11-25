@@ -21,6 +21,6 @@ class Services {
   }
 
   static Future<void> syncAll() async {
-   await syncService.syncAll();
+    await syncService.syncAll();
   }
 }

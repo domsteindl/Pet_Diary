@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -80,7 +81,6 @@ class _PetAddScreenState extends State<PetAddScreen> {
 
     if (!mounted) return;
 
-    // Onboarding beendet → direkt HomeScreen
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -124,7 +124,7 @@ class _PetAddScreenState extends State<PetAddScreen> {
                 items: PetType.values
                     .map(
                       (type) =>
-                          DropdownMenuItem(value: type, child: Text(type.name)),
+                          DropdownMenuItem(value: type, child: Text(type.name.toUpperCase())),
                     )
                     .toList(),
                 onChanged: (value) {

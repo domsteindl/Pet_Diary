@@ -3,9 +3,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pet_diary/src/core/services/services.dart';
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
 import 'package:pet_diary/src/features/login/presentation/pet_login_screen.dart';
-import 'package:pet_diary/src/features/navigation/presentation/screens/shell_screen.dart';
 import 'package:pet_diary/src/features/onboarding/presentation/pet_onboarding_screen.dart';
-import 'package:pet_diary/src/features/pets/presentation/screens/mypets_manage_screen.dart';
+import 'package:pet_diary/src/features/pets/presentation/screens/pet_add_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -69,8 +68,7 @@ class _MainAppState extends State<MainApp> {
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
-        '/manage_pets': (context) => const MypetsManageScreen(),
-        '/shell': (context) => const ShellScreen(),
+        '/addpet' : (context) => const PetAddScreen(),
       },
     );
   }

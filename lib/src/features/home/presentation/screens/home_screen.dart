@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 import 'package:pet_diary/src/core/services/hive_service.dart';
 import 'package:pet_diary/src/core/services/supabase_service.dart';
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Stream<List<Pet>> petsRemote;
   PetRemoteRepository remoteRepo = PetRemoteRepository(SupabaseService.client);
   bool isDark = false;
+  int _currentPetIndex = 0;
 
   Stream<List<Pet>> getAllPetsStream() {
     return SupabaseService.client
@@ -30,13 +32,53 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   int? selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     final titleText = !isSwapped ? "Tiertagebuch" : "Aquaristik & Co.";
     final buttonText = !isSwapped ? "Aquaristik & Co." : "Tiertagebuch";
     return Scaffold(
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+        childrenOffset: const Offset(-15, 0),
+        overlayStyle: ExpandableFabOverlayStyle(
+          color: Colors.black.withValues(alpha: 0.45), // Abdunkeln
+          blur: 4,
+        ),
+        type: ExpandableFabType.up,
+        openButtonBuilder: RotateFloatingActionButtonBuilder(
+          child: const Icon(Icons.edit_document),
+          fabSize: ExpandableFabSize.regular,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.blueAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(10),
+          ),
+        ),
+        closeButtonBuilder: RotateFloatingActionButtonBuilder(
+          child: const Icon(Icons.close),
+          fabSize: ExpandableFabSize.regular,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(10),
+          ),
+        ),
+        children: <Widget>[
+          FabItem('Platzhalter', onPressed: () => print("")),
+          FabItem(
+            'Tagebucheintrag anlegen',
+            onPressed: () => print("anlegen gedrückt"),
+          ),
+          FabItem(
+            'Tier anlegen',
+            onPressed: () => Navigator.pushNamed(context, '/addpet'),
+          ),
+        ],
+      ),
       appBar: AppBar(
         title: Text(titleText),
+
         actions: [
           TextButton.icon(
             onPressed: () {
@@ -61,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Text('Fehler: ${snapshot.error}');
           } else {
             final petsRemote = snapshot.data!;
+            final currentPet = petsRemote[_currentPetIndex];
             return Column(
               children: [
                 Container(
@@ -70,32 +113,51 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: double.infinity,
                   child: PageView.builder(
                     scrollDirection: Axis.horizontal,
-                    onPageChanged: (value) {},
+                    onPageChanged: (value) {
+                      _currentPetIndex = value;
+                    },
                     itemCount: petsRemote.length,
                     itemBuilder: (context, index) {
-                      return PetCard(pet: petsRemote[index]);
+                      return PetCard(pet: currentPet);
                     },
                   ),
                 ),
                 Expanded(
-                  child: Timeline.tileBuilder(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    builder: TimelineTileBuilder(
-                      contentsBuilder: (context, index) {
-                        return Center(
-                          child: TimeLineEntry(petsRemote[index].name, index),
-                        );
-                      },
-                      contentsAlign: ContentsAlign.alternating,
-                      startConnectorBuilder: (context, index) =>
-                          const SolidLineConnector(),
-                      endConnectorBuilder: (context, index) =>
-                          const SolidLineConnector(),
-                      indicatorBuilder: (context, index) =>
-                          const DotIndicator(),
+                  child: TimelineTheme(
+                    data: TimelineThemeData(
+                      nodePosition: 0.5,
 
-                      itemCount: petsRemote.length,
-                      itemExtent: 200,
+                      indicatorTheme: IndicatorThemeData(
+                        color: Colors.blue.shade400,
+                      ),
+                      color: Colors.grey[400],
+                    ),
+                    child: Timeline.tileBuilder(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      builder: TimelineTileBuilder(
+                        contentsBuilder: (context, index) {
+                          final diaryEntry = currentPet.entries[index];
+                          print(diaryEntry);
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: TimeLineEntry(
+                              currentPet.name,
+                              diaryEntry.description ?? 'Platzhalter',
+                              index,
+                            ),
+                          );
+                        },
+                        contentsAlign: ContentsAlign.alternating,
+                        startConnectorBuilder: (context, index) =>
+                            const SolidLineConnector(),
+                        endConnectorBuilder: (context, index) =>
+                            const SolidLineConnector(),
+                        indicatorBuilder: (context, index) =>
+                            const DotIndicator(),
+
+                        itemCount: currentPet.entries.length,
+                        itemExtent: 200,
+                      ),
                     ),
                   ),
                 ),
@@ -104,177 +166,35 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
-      // FutureBuilder<List<Pet>>(
-      //   future: fetchPets(),
-      //   builder: (context, snapshot) {
-
-      //   },
-      // ),
     );
+  }
+}
 
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text(
-    //       "Tiertagebuch",
-    //       style: Theme.of(context).textTheme.titleLarge,
-    //     ),
-    //     elevation: 3,
-    //   ),
+class FabItem extends StatelessWidget {
+  final String label;
+  final Function() onPressed;
+  const FabItem(this.label, {super.key, required this.onPressed});
 
-    //   body: SafeArea(
-    //     child: Padding(
-    //       padding: const EdgeInsets.all(8.0),
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //         children: [
-    //           Row(
-    //             spacing: 30,
-    //             children: [
-    //               SizedBox(
-    //                 width: 280,
-    //                 child: SearchAnchor.bar(
-    //                   suggestionsBuilder: (context, controller) {
-    //                     final String input = controller.text;
-
-    //                     return pets
-    //                         .where(
-    //                           (Pet pet) => pet.species.label.contains(input),
-    //                         )
-    //                         .map((e) => Text(e.name))
-    //                         .toList();
-    //                   },
-    //                   barHintText: 'Suche...',
-    //                 ),
-    //               ),
-    //               GestureDetector(
-    //                 onTap: () => print("tapped"),
-    //                 child: Container(
-    //                   height: 60,
-    //                   width: 60,
-    //                   decoration: BoxDecoration(
-    //                     color: Colors.black,
-    //                     borderRadius: BorderRadius.circular(30),
-    //                   ),
-    //                   child: Icon(Icons.filter_alt, color: Colors.white),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //           Row(
-    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //             children: [Text("Kategorie"), Text("Alle anzeigen")],
-    //           ),
-    //           SizedBox(
-    //             height: 155,
-    //             child: ListView.builder(
-    //               scrollDirection: Axis.horizontal,
-    //               itemCount: PetType.values.length,
-
-    //               itemBuilder: (context, index) {
-    //                 return GestureDetector(
-    //                   onTap: () => setState(() {
-    //                     selectedIndex = index;
-    //                   }),
-    //                   child: Container(
-    //                     padding: const EdgeInsets.all(6.0),
-    //                     child: Card(
-    //                       elevation: 3,
-    //                       shape: RoundedRectangleBorder(
-    //                         borderRadius: BorderRadiusGeometry.circular(50),
-    //                       ),
-    //                       child: AspectRatio(
-    //                         aspectRatio: 3 / 4,
-    //                         child: Column(
-    //                           spacing: 10,
-    //                           children: [
-    //                             Padding(
-    //                               padding: const EdgeInsets.only(top: 10.0),
-    //                               child: Container(
-    //                                 height: 60,
-    //                                 width: 60,
-    //                                 decoration: BoxDecoration(
-    //                                   color: Colors.white,
-    //                                   borderRadius: BorderRadius.circular(30),
-    //                                 ),
-    //                                 child: Icon(
-    //                                   color: selectedIndex == index
-    //                                       ? Colors.orange
-    //                                       : Colors.black,
-    //                                   Icons.pest_control_rodent,
-    //                                 ),
-    //                               ),
-    //                             ),
-    //                             Text(PetType.values[index].label),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 );
-    //               },
-    //             ),
-    //           ),
-    //           SizedBox(
-    //             height: 250,
-    //             child: ListView.builder(
-    //               itemCount: pets.length,
-    //               scrollDirection: Axis.horizontal,
-    //               itemBuilder: (context, index) {
-    //                 Pet pet = pets[index];
-    //                 final textPainter = TextPainter(
-    //                   text: TextSpan(text: pet.name),
-    //                   textDirection: TextDirection.ltr,
-    //                 )..layout();
-
-    //                 final textWidth = textPainter.width;
-    //                 return Padding(
-    //                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
-    //                   child: Stack(
-    //                     clipBehavior: Clip.none,
-    //                     alignment: Alignment.centerLeft,
-    //                     children: [
-    //                       ClipPath(
-    //                         clipper: CustomClipperShape(),
-    //                         child: Container(
-    //                           color: const Color.fromARGB(255, 216, 214, 175),
-    //                           width: 180,
-    //                           height: 180,
-    //                         ),
-    //                       ),
-
-    //                       Positioned(
-    //                         top: 90,
-    //                         left: -20,
-    //                         child: Transform(
-    //                           alignment: Alignment.topLeft,
-    //                           transform: Matrix4.identity()
-    //                             ..rotateZ(-pi / 2)
-    //                             ..translateByVector3(
-    //                               vmath.Vector3(-textWidth + 40, 0, 0),
-    //                             ), // TextWidth messen
-    //                           child: Text(pet.name),
-    //                         ),
-    //                       ),
-    //                       Positioned(
-    //                         top: 50,
-    //                         child: Text('Typ: ${pet.species.label}'),
-    //                       ),
-    //                       Positioned.fill(
-    //                         top: 40,
-    //                         left: 40,
-    //                         child: SvgPicture.asset(pet.species.imagePath),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 );
-    //               },
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label),
+          const SizedBox(width: 15),
+          FloatingActionButton.small(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(10),
+            ),
+            heroTag: null,
+            onPressed: onPressed,
+            child: const Icon(Icons.edit),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -338,6 +258,10 @@ class PetCard extends StatelessWidget {
                   pet.species.label,
                   style: TextStyle(color: Colors.grey[700]),
                 ),
+                Text(
+                  "${pet.weight} Kg",
+                  style: TextStyle(color: Colors.grey[700]),
+                ),
               ],
             ),
           ),
@@ -382,9 +306,10 @@ class CustomClipperShape extends CustomClipper<Path> {
 }
 
 class TimeLineEntry extends StatelessWidget {
-  final String name;
+  final String title;
+  final String description;
   final int index;
-  const TimeLineEntry(this.name, this.index, {super.key});
+  const TimeLineEntry(this.title, this.description, this.index, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -426,9 +351,12 @@ class TimeLineEntry extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            "Walk in the park",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const Text(
             "Here will be written a short description of the Diary Entry. Further Details when clicking on the picture",
