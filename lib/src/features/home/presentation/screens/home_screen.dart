@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   PetRemoteRepository remoteRepo = PetRemoteRepository(SupabaseService.client);
   bool isDark = false;
   int _currentPetIndex = 0;
+  Pet? currentPet;
 
   Stream<List<Pet>> getAllPetsStream() {
     return remoteRepo.getAllPets().asStream();
@@ -99,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Text('Fehler: ${snapshot.error}');
           } else {
             final petsRemote = snapshot.data!;
-            final currentPet = petsRemote[_currentPetIndex];
+            currentPet = petsRemote[_currentPetIndex];
             return Column(
               children: [
                 Container(
@@ -110,11 +111,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: PageView.builder(
                     scrollDirection: Axis.horizontal,
                     onPageChanged: (value) {
-                      _currentPetIndex = value;
+                      setState(() {
+                        _currentPetIndex = value;
+                        currentPet =
+                            petsRemote[value]; // Timeline aktualisieren
+                      });
                     },
                     itemCount: petsRemote.length,
                     itemBuilder: (context, index) {
-                      return PetCard(pet: currentPet);
+                      final pet = petsRemote[index];
+                      return PetCard(pet: pet);
                     },
                   ),
                 ),
@@ -132,11 +138,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       builder: TimelineTileBuilder(
                         contentsBuilder: (context, index) {
-                          final diaryEntry = currentPet.entries[index];
+                          final diaryEntry = currentPet!.entries[index];
                           return Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: TimeLineEntry(
-                              currentPet.name,
+                              currentPet!.name,
                               diaryEntry.description ?? 'Platzhalter',
                               index,
                             ),
@@ -150,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         indicatorBuilder: (context, index) =>
                             const DotIndicator(),
 
-                        itemCount: currentPet.entries.length,
+                        itemCount: currentPet!.entries.length,
                         itemExtent: 200,
                       ),
                     ),
@@ -173,9 +179,9 @@ class FabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const .symmetric(horizontal: 12, vertical: 8),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           Text(label),
           const SizedBox(width: 15),

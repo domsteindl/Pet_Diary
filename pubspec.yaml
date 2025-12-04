@@ -1,10 +1,10 @@
 name: pet_diary
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ^3.9.2
+  sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
   carousel_slider: ^5.1.1
@@ -37,17 +37,13 @@ flutter_native_splash:
   image: "lib/src/assets/icon/icon.png"
   color: "#a2ebe8"
   branding_mode: scale
-  
 
   android_12:
     image: "lib/src/assets/icon/icon.png"
     color: "#a2ebe8"
-    
 
   ios: true
   web: false
-
-
 
 flutter:
   uses-material-design: true
@@ -56,4 +52,3 @@ flutter:
     - lib/src/assets/illustrations/
     - lib/src/assets/icon/
     - .env
-

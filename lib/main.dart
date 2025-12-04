@@ -8,7 +8,7 @@ import 'package:pet_diary/src/features/pets/presentation/screens/pet_add_screen.
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Services.initAll();
@@ -68,7 +68,7 @@ class _MainAppState extends State<MainApp> {
         '/onboarding': (context) => const OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
-        '/addpet' : (context) => const PetAddScreen(),
+        '/addpet': (context) => const PetAddScreen(),
       },
     );
   }
