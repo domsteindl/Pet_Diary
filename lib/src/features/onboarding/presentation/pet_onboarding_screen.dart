@@ -91,7 +91,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 subtitle:
                     "Verfolge ganz einfach die Entwicklung deiner Tiere. z. B. Essverhalten, Gewichtsveränderungen usw.",
               ),
-              buildLastPage(context),
+              buildLastPage(),
             ],
           ),
         ),
@@ -162,7 +162,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  Widget buildLastPage(BuildContext context) {
+  Widget buildLastPage() {
     return Container(
       color: Colors.teal.shade200,
       child: Center(
