@@ -18,7 +18,6 @@ class CatAdapter extends TypeAdapter<Cat> {
     };
     return Cat(
       name: fields[1] as String,
-      species: fields[2] as PetType,
       age: (fields[3] as num).toInt(),
       weight: (fields[8] as num).toDouble(),
       imageUrl: fields[4] as String,
@@ -33,11 +32,9 @@ class CatAdapter extends TypeAdapter<Cat> {
   @override
   void write(BinaryWriter writer, Cat obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(1)
       ..write(obj.name)
-      ..writeByte(2)
-      ..write(obj.species)
       ..writeByte(3)
       ..write(obj.age)
       ..writeByte(4)
@@ -76,6 +73,8 @@ class PetTypeAdapter extends TypeAdapter<PetType> {
         return PetType.dog;
       case 2:
         return PetType.bird;
+      case 3:
+        return PetType.fish;
       default:
         return PetType.cat;
     }
@@ -90,6 +89,8 @@ class PetTypeAdapter extends TypeAdapter<PetType> {
         writer.writeByte(1);
       case PetType.bird:
         writer.writeByte(2);
+      case PetType.fish:
+        writer.writeByte(3);
     }
   }
 
@@ -288,6 +289,52 @@ class EntryTypeAdapter extends TypeAdapter<EntryType> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is EntryTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class FishAdapter extends TypeAdapter<Fish> {
+  @override
+  final typeId = 7;
+
+  @override
+  Fish read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Fish(
+        name: fields[0] as String,
+        age: (fields[1] as num).toInt(),
+        imageUrl: fields[2] as String,
+      )
+      ..appointments = (fields[3] as List).cast<PetAppointment>()
+      ..entries = (fields[4] as List).cast<DiaryEntry>();
+  }
+
+  @override
+  void write(BinaryWriter writer, Fish obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.age)
+      ..writeByte(2)
+      ..write(obj.imageUrl)
+      ..writeByte(3)
+      ..write(obj.appointments)
+      ..writeByte(4)
+      ..write(obj.entries);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FishAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -4,3 +4,6 @@ linter:
     - prefer_const_constructors
     - prefer_const_literals_to_create_immutables
     - prefer_const_declarations
+analyzer:
+  plugins:
+    - custom_lint

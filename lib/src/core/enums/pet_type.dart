@@ -1,7 +1,8 @@
 enum PetType {
   cat('Katze', "lib/src/assets/illustrations/cat.svg"),
   dog('Hunde', "lib/src/assets/illustrations/shiba.png"),
-  bird('Vogel', '');
+  bird('Vogel', ''),
+  fish('Fisch', '');
 
   final String label;
   final String imagePath;

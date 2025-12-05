@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pet_diary/main.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -14,30 +13,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Einstellungen")),
+      appBar: AppBar(title: const Text("Einstellungen")),
       body: SafeArea(
         child: ListView(
           children: [
             ListTile(
-              leading: Icon(Icons.dark_mode),
-              title: Text("Dark Mode"),
-              trailing: Switch(
-                value: isDarkMode,
-                onChanged: (value) {
-                  setState(() {
-                    isDarkMode = !isDarkMode;
-                    MainApp.of(
-                      context,
-                    )?.changeTheme(isDarkMode ? ThemeMode.dark : ThemeMode.light);
-                  });
-                },
-              ),
+              leading: const Icon(Icons.dark_mode),
+              title: const Text("Dark Mode"),
+              trailing: Switch(value: isDarkMode, onChanged: (value) {}),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.notifications),
-              title: Text("Erinnerungen"),
-              subtitle: Text("Vor Terminen benachrichtigen"),
+              leading: const Icon(Icons.notifications),
+              title: const Text("Erinnerungen"),
+              subtitle: const Text("Vor Terminen benachrichtigen"),
               trailing: Switch(
                 value: notificationsEnabled,
                 onChanged: (value) {
@@ -45,16 +34,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.pets),
-              title: Text("Tiere verwalten"),
+              leading: const Icon(Icons.pets),
+              title: const Text("Tiere verwalten"),
               onTap: () {
                 Navigator.pushNamed(context, '/manage_pets');
               },
             ),
-            Divider(),
-            ListTile(
+            const Divider(),
+            const ListTile(
               leading: Icon(Icons.info_outline),
               title: Text("Über diese App"),
               subtitle: Text("Version 1.0.0"),

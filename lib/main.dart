@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_diary/src/core/services/services.dart';
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
-import 'package:pet_diary/src/features/login/presentation/pet_login_screen.dart';
+import 'package:pet_diary/src/features/onboarding/domain/onboarding_controller.dart';
 import 'package:pet_diary/src/features/onboarding/presentation/pet_onboarding_screen.dart';
-import 'package:pet_diary/src/features/pets/presentation/screens/pet_add_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -16,60 +15,31 @@ Future<void> main() async {
 
   //await PetManager().init();
 
-  final prefs = await SharedPreferences.getInstance();
-  final bool seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
-  runApp(MainApp(seenOnboarding: seenOnboarding));
+  runApp(const ProviderScope(child: MainApp()));
 
-  Future.delayed(const Duration(seconds: 3), () {
-    FlutterNativeSplash.remove();
-  });
+  FlutterNativeSplash.remove();
 }
 
-class MainApp extends StatefulWidget {
-  final bool seenOnboarding;
-  const MainApp({super.key, required this.seenOnboarding});
-
-  static _MainAppState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_MainAppState>();
+class MainApp extends ConsumerWidget {
+  const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  ThemeMode _themeMode = ThemeMode.light;
-
-  void changeTheme(ThemeMode newMode) {
-    setState(() {
-      _themeMode = newMode;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Pet Diary',
-      themeMode: _themeMode,
-      theme: ThemeData(
-        useMaterial3: false,
-        primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.teal,
-          foregroundColor: Colors.white,
-          elevation: 0,
-        ),
-        textTheme: const TextTheme(bodyMedium: TextStyle(fontSize: 16)),
-      ),
-      darkTheme: ThemeData.dark(),
-      initialRoute: widget.seenOnboarding ? '/home' : '/onboarding',
-      routes: {
-        '/onboarding': (context) => const OnboardingScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/addpet': (context) => const PetAddScreen(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final onboardingAsync = ref.watch(onboardingProvider);
+    return onboardingAsync.when(
+      data: (seenOnboarding) {
+        return MaterialApp(
+          home: seenOnboarding ? const HomeScreen() : const OnboardingScreen(),
+        );
       },
+      error: (error, stackTrace) => MaterialApp(
+        home: Scaffold(body: Center(child: Text('Fehler: $error'))),
+      ),
+      loading: () => const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator.adaptive()),
+        ),
+      ),
     );
   }
 }

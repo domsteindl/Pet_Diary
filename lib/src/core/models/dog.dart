@@ -5,6 +5,9 @@ import 'package:pet_diary/src/core/models/entry.dart';
 import 'package:pet_diary/src/core/models/pet.dart';
 
 class Dog extends Pet with HiveObjectMixin {
+  @override
+  bool get isAquatic => false;
+
   Dog({
     required super.name,
     required super.species,

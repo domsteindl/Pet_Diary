@@ -3,6 +3,7 @@ import 'package:pet_diary/src/core/models/appointment.dart';
 import 'package:pet_diary/src/core/models/cat.dart';
 import 'package:pet_diary/src/core/models/dog.dart';
 import 'package:pet_diary/src/core/models/entry.dart';
+import 'package:pet_diary/src/core/models/fish.dart';
 
 abstract class Pet {
  // static int _idCounter = 0;
@@ -15,6 +16,7 @@ abstract class Pet {
   final double weight;
   final String imageUrl;
   final String description;
+   bool get isAquatic;
   List<PetAppointment> appointments;
   List<DiaryEntry> entries;
   Pet({
@@ -24,6 +26,7 @@ abstract class Pet {
     required this.imageUrl,
     this.description = "Keine Beschreibung vorhanden",
     this.weight = 1.0,
+
     List<PetAppointment>? appointments,
     List<DiaryEntry>? entries,
   }) : //id = _idCounter++,
@@ -56,6 +59,10 @@ abstract class Pet {
         final pet = Cat.fromMap(map);
         if (map['id'] != null) pet.setId(map['id'] as int);
         return pet;
+      case 'fish':
+      final pet = Fish.fromMap(map);
+      if (map['id'] != null) pet.setId(map['id'] as int);
+      return pet;
       default:
         throw Exception('Unknown PetType: ${map['species']}');
     }

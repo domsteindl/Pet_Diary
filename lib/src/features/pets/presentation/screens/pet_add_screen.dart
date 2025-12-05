@@ -63,7 +63,6 @@ class _PetAddScreenState extends State<PetAddScreen> {
 
     final newPet = Cat(
       name: _nameController.text.trim(),
-      species: _selectedType,
       age: 0,
       weight: 2.0,
       imageUrl: _imageUrl ?? '',

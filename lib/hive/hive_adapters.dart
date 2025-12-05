@@ -5,6 +5,7 @@ import 'package:pet_diary/src/core/enums/pet_type.dart';
 import 'package:pet_diary/src/core/models/appointment.dart';
 import 'package:pet_diary/src/core/models/cat.dart';
 import 'package:pet_diary/src/core/models/entry.dart';
+import 'package:pet_diary/src/core/models/fish.dart';
 
 part 'hive_adapters.g.dart';
 
@@ -15,5 +16,6 @@ part 'hive_adapters.g.dart';
   AdapterSpec<AppointmentType>(),
   AdapterSpec<DiaryEntry>(),
   AdapterSpec<EntryType>(),
+  AdapterSpec<Fish>(),
 ])
 class HiveAdapters {}

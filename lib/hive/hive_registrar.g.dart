@@ -11,6 +11,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(CatAdapter());
     registerAdapter(DiaryEntryAdapter());
     registerAdapter(EntryTypeAdapter());
+    registerAdapter(FishAdapter());
     registerAdapter(PetAppointmentAdapter());
     registerAdapter(PetTypeAdapter());
   }
@@ -22,6 +23,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(CatAdapter());
     registerAdapter(DiaryEntryAdapter());
     registerAdapter(EntryTypeAdapter());
+    registerAdapter(FishAdapter());
     registerAdapter(PetAppointmentAdapter());
     registerAdapter(PetTypeAdapter());
   }

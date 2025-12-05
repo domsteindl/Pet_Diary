@@ -1,20 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet_diary/src/features/home/presentation/screens/home_screen.dart';
+import 'package:pet_diary/src/features/onboarding/domain/onboarding_controller.dart';
 import 'package:pet_diary/src/features/pets/presentation/screens/pet_add_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _controller = PageController();
   bool isLastPage = false;
   bool _loading = true;
@@ -104,7 +105,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           children: [
             TextButton(
               child: const Text('Überspringen'),
-              onPressed: () => goToHome(context),
+              onPressed: () => goToHome(),
             ),
             Center(
               child: SmoothPageIndicator(
@@ -122,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(isLastPage ? 'Fertig' : 'Weiter'),
               onPressed: () {
                 if (isLastPage) {
-                  goToHome(context);
+                  goToHome();
                 } else {
                   _controller.nextPage(
                     duration: const Duration(milliseconds: 300),
@@ -173,15 +174,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             foregroundColor: Colors.teal,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           ),
-          onPressed: () => goToPetAdd(context),
+          onPressed: () => goToPetAdd(),
         ),
       ),
     );
   }
 
-  Future<void> goToHome(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('seenOnboarding', true);
+  Future<void> goToHome() async {
+    await ref.read(onboardingProvider.notifier).complete();
     if (!mounted) return;
     Navigator.pushReplacement(
       context,
@@ -189,10 +189,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Future<void> goToPetAdd(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('seenOnboarding', true);
-
+  Future<void> goToPetAdd() async {
+    await ref.read(onboardingProvider.notifier).complete();
     if (!mounted) return;
     Navigator.pushReplacement(
       context,
